@@ -1,13 +1,14 @@
-@extends('frontend.master_dashboard')
-@section('main')
+<?php $__env->startSection('main'); ?>
 <div class="page-header breadcrumb-wrap">
     <div class="container">
         <div class="breadcrumb">
             <a href="index.html" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
             <span></span> <a
-                href="shop-grid-right.html">{{ isset($product['category']['category_name']) ? $product['category']['category_name'] : 'Não informado' }}
+                href="shop-grid-right.html"><?php echo e(isset($product['category']['category_name']) ? $product['category']['category_name'] : 'Não informado'); ?>
+
             </a> <span></span>
-            {{ isset($product['subcategory']['subcategory_name']) ? $product['subcategory']['subcategory_name'] : 'Não informado' }}<span></span>{{$product->product_name}}
+            <?php echo e(isset($product['subcategory']['subcategory_name']) ? $product['subcategory']['subcategory_name'] : 'Não informado'); ?><span></span><?php echo e($product->product_name); ?>
+
 
         </div>
     </div>
@@ -22,31 +23,31 @@
                             <span class="zoom-icon"><i class="fi-rs-search"></i></span>
                             <!-- MAIN SLIDES -->
                             <div class="product-image-slider">
-                                @if($product->getMedia('products')->isNotEmpty())
-                                @foreach($product->getMedia('products') as $media)
+                                <?php if($product->getMedia('products')->isNotEmpty()): ?>
+                                <?php $__currentLoopData = $product->getMedia('products'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <figure class="border-radius-10">
-                                    <img src="{{ $media->getUrl() }}" alt="Imagem do Produto"
+                                    <img src="<?php echo e($media->getUrl()); ?>" alt="Imagem do Produto"
                                         style="width:900px; height:550px;">
                                 </figure>
-                                @endforeach
-                                @else
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php else: ?>
                                 <figure class="border-radius-10">
-                                    <img src="{{ asset('upload/no_image.jpg') }}" alt="Imagem Padrão"
+                                    <img src="<?php echo e(asset('upload/no_image.jpg')); ?>" alt="Imagem Padrão"
                                         style="width:900px; height:550px;">
                                 </figure>
-                                @endif
+                                <?php endif; ?>
 
 
 
                             </div>
                             <!-- THUMBNAILS -->
                             <div class="slider-nav-thumbnails">
-                                @foreach($product->getMedia('products') as $media)
+                                <?php $__currentLoopData = $product->getMedia('products'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $media): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div>
-                                    <img src="{{ $media->getUrl() }}" alt="Imagem do Produto"
+                                    <img src="<?php echo e($media->getUrl()); ?>" alt="Imagem do Produto"
                                         style="width:100px; height:100px;">
                                 </div>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             </div>
                         </div>
@@ -54,14 +55,14 @@
                     </div>
                     <div class="col-md-6 col-sm-12 col-xs-12">
                         <div class="detail-info pr-30 pl-30">
-                            @if($product->product_qty>0)
+                            <?php if($product->product_qty>0): ?>
                             <span class="stock-status in-stock">Com Estoque </span>
-                            @else
+                            <?php else: ?>
                             <span class="stock-status out-stock">Sem Estoque </span>
 
-                            @endif
+                            <?php endif; ?>
 
-                            <h2 class="title-detail">{{$product->product_name}}</h2>
+                            <h2 class="title-detail"><?php echo e($product->product_name); ?></h2>
                             <div class="product-detail-rating">
                                 <div class="product-rate-cover text-end">
                                     <div class="product-rate d-inline-block">
@@ -71,57 +72,57 @@
                                 </div>
                             </div>
                             <div class="clearfix product-price-cover">
-                                @php
+                                <?php
                                 $amount= $product->selling_price - $product->discount_price;
                                 $discount = ($amount/$product->selling_price)*100;
-                                @endphp
+                                ?>
 
-                                @if($product->discount_price === NULL || $product->discount_price == 0) <div
+                                <?php if($product->discount_price === NULL || $product->discount_price == 0): ?> <div
                                     class="product-price primary-color float-left">
-                                    <span class="current-price text-brand">{{$product->selling_price}} Mzn</span>
+                                    <span class="current-price text-brand"><?php echo e($product->selling_price); ?> Mzn</span>
 
                                 </div>
-                                @else
+                                <?php else: ?>
                                 <div class="product-price primary-color float-left">
-                                    <span class="current-price text-brand">{{$product->discount_price}} Mzn</span>
+                                    <span class="current-price text-brand"><?php echo e($product->discount_price); ?> Mzn</span>
                                     <span>
-                                        <span class="save-price font-md color3 ml-15">-{{round($discount)}}%</span>
-                                        <span class="old-price font-md ml-15">{{$product->selling_price}} Mzn</span>
+                                        <span class="save-price font-md color3 ml-15">-<?php echo e(round($discount)); ?>%</span>
+                                        <span class="old-price font-md ml-15"><?php echo e($product->selling_price); ?> Mzn</span>
                                     </span>
                                 </div>
-                                @endif
+                                <?php endif; ?>
 
                             </div>
                             <div class="short-desc mb-30">
-                                <p class="font-lg">{{$product->short_descp}}</p>
+                                <p class="font-lg"><?php echo e($product->short_descp); ?></p>
                             </div>
-                            @if(empty($product_size))
+                            <?php if(empty($product_size)): ?>
                             <p class="text-muted">Nenhum tamanho disponível</p>
-                            @else
+                            <?php else: ?>
                             <div class="attr-detail attr-size mb-30">
                                 <strong class="mr-10">Tamanho:</strong>
                                 <select class="form-control unicase-form-control" name="size" id="_size">
                                     <option value="" selected="" disabled="">--Escolha O Tamanho--</option>
-                                    @foreach($product_size as $size)
-                                    <option value="{{ $size }}">{{ ucwords($size) }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = $product_size; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $size): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($size); ?>"><?php echo e(ucwords($size)); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
-                            @endif
+                            <?php endif; ?>
 
-                            @if(empty($product_color))
+                            <?php if(empty($product_color)): ?>
                             <p class="text-muted">Nenhuma cor disponível</p>
-                            @else
+                            <?php else: ?>
                             <div class="attr-detail attr-size mb-30">
                                 <strong class="mr-10" style="width:70px;">Cor:</strong>
                                 <select class="form-control unicase-form-control" name="color" id="_color">
                                     <option value="" selected="" disabled="">--Escolha a cor--</option>
-                                    @foreach($product_color as $color)
-                                    <option value="{{ $color }}">{{ ucwords($color) }}</option>
-                                    @endforeach
+                                    <?php $__currentLoopData = $product_color; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $color): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($color); ?>"><?php echo e(ucwords($color)); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </select>
                             </div>
-                            @endif
+                            <?php endif; ?>
 
 
 
@@ -132,7 +133,7 @@
                             <div class="detail-qty border radius">
                                 <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
                                 <input type="text" name="quantity" class="qty-val" value="1" min="1"
-                                    max="{{ $product->product_qty }}" oninput="checkMaxValue(this)" id="qtd">
+                                    max="<?php echo e($product->product_qty); ?>" oninput="checkMaxValue(this)" id="qtd">
                                 <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                             </div>
                             <div class="product-extra-link2">
@@ -145,47 +146,50 @@
                             </div>
                         </div>
 
-                        @if($product->vendor_id==NULL)
+                        <?php if($product->vendor_id==NULL): ?>
                         <h6> Vendido pelo <a href="#"><span class="text-danger"> Proprietário</span></a></h6>
-                        @else
+                        <?php else: ?>
                         <h6>
                             Vendido pelo
-                            @if(isset($product['vendor']) && isset($product['vendor']['name']))
+                            <?php if(isset($product['vendor']) && isset($product['vendor']['name'])): ?>
                             <a href="#">
-                                <span class="text-danger">{{$product['vendor']['name']}}</span>
+                                <span class="text-danger"><?php echo e($product['vendor']['name']); ?></span>
                             </a>
-                            @else
+                            <?php else: ?>
                             <span class="text-muted">Não especificado</span>
-                            @endif
+                            <?php endif; ?>
                         </h6>
 
-                        @endif
+                        <?php endif; ?>
                         <hr>
                         <div class="font-xs">
                             <ul class="mr-50 float-start">
                                 <li class="mb-5">Marca:
                                     <span class="text-brand">
-                                        {{ isset($product['brand']['brand_name']) ? $product['brand']['brand_name'] : 'Não informado' }}
+                                        <?php echo e(isset($product['brand']['brand_name']) ? $product['brand']['brand_name'] : 'Não informado'); ?>
+
                                     </span>
                                 </li>
                                 <li class="mb-5">Categoria:
                                     <span class="text-brand">
-                                        {{ isset($product['category']['category_name']) ? $product['category']['category_name'] : 'Não informado' }}
+                                        <?php echo e(isset($product['category']['category_name']) ? $product['category']['category_name'] : 'Não informado'); ?>
+
                                     </span>
                                 </li>
                                 <li>Subcategoria:
                                     <span class="text-brand">
-                                        {{ isset($product['subcategoria']['subcategory_name']) ? $product['subcategoria']['subcategory_name'] : 'Não informado' }}
+                                        <?php echo e(isset($product['subcategoria']['subcategory_name']) ? $product['subcategoria']['subcategory_name'] : 'Não informado'); ?>
+
                                     </span>
                                 </li>
                             </ul>
 
                             <ul class="float-start">
-                                <li class="mb-5">Codigo do produto: <a href="#">{{$product->product_code}}</a></li>
+                                <li class="mb-5">Codigo do produto: <a href="#"><?php echo e($product->product_code); ?></a></li>
 
-                                <li class="mb-5">Tags: <a href="#" rel="tag">{{$product->product_tags}}</a></li>
+                                <li class="mb-5">Tags: <a href="#" rel="tag"><?php echo e($product->product_tags); ?></a></li>
 
-                                <li>Estoque:<span class="in-stock text-brand ml-5">{{$product->product_qty}} item no
+                                <li>Estoque:<span class="in-stock text-brand ml-5"><?php echo e($product->product_qty); ?> item no
                                         estoque</span></li>
                             </ul>
                         </div>
@@ -214,7 +218,7 @@
                     <div class="tab-content shop_info_tab entry-main-content">
                         <div class="tab-pane fade show active" id="Description">
                             <div class="">
-                                <p>{!! $product->long_descp !!}</p>
+                                <p><?php echo $product->long_descp; ?></p>
                             </div>
                         </div>
                         <div class="tab-pane fade" id="Additional-info">
@@ -309,27 +313,27 @@
                         </div>
                         <div class="tab-pane fade" id="Vendor-info">
                             <div class="vendor-logo d-flex mb-30">
-                                <img src="{{(!empty($product->vendor->photo)) ? url('upload/vendor_images/'.$product->vendor->photo):url('upload/no_image.jpg')}}"
+                                <img src="<?php echo e((!empty($product->vendor->photo)) ? url('upload/vendor_images/'.$product->vendor->photo):url('upload/no_image.jpg')); ?>"
                                     alt="" />
                                 <div class="vendor-name ml-15">
-                                    @if($product->vendor_id==NULL)
+                                    <?php if($product->vendor_id==NULL): ?>
                                     <h6>
                                         <a href="vendor-details-2.html">Proprietario</a>
                                     </h6>
-                                    @else
+                                    <?php else: ?>
                                     <h6>
                                         <h6>
                                             Vendido pelo
-                                            @if(isset($product['vendor']) && isset($product['vendor']['name']))
+                                            <?php if(isset($product['vendor']) && isset($product['vendor']['name'])): ?>
                                             <a href="#">
-                                                <span class="text-danger">{{$product['vendor']['name']}}</span>
+                                                <span class="text-danger"><?php echo e($product['vendor']['name']); ?></span>
                                             </a>
-                                            @else
+                                            <?php else: ?>
                                             <span class="text-muted">Não especificado</span>
-                                            @endif
+                                            <?php endif; ?>
                                         </h6>
                                     </h6>
-                                    @endif
+                                    <?php endif; ?>
 
                                     <div class="product-rate-cover text-end">
                                         <div class="product-rate d-inline-block">
@@ -339,27 +343,27 @@
                                     </div>
                                 </div>
                             </div>
-                            @if($product->vendor_id==NULL)
+                            <?php if($product->vendor_id==NULL): ?>
                             <ul class="contact-infor mb-50">
-                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-location.svg')}}"
+                                <li><img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-location.svg')); ?>"
                                         alt="" /><strong>Enderenco: </strong> <span>Proprietario</span></li>
-                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-contact.svg')}}"
+                                <li><img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-contact.svg')); ?>"
                                         alt="" /><strong>Contacto:</strong><span>Proprietario</span></li>
                             </ul>
-                            @else
+                            <?php else: ?>
                             <ul class="contact-infor mb-50">
-                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-location.svg')}}"
+                                <li><img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-location.svg')); ?>"
                                         alt="" /><strong>Enderenco: </strong> <span></span></li>
-                                <li><img src="{{asset('frontend/assets/imgs/theme/icons/icon-contact.svg')}}"
+                                <li><img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-contact.svg')); ?>"
                                         alt="" /><strong>Contacto:</strong><span></span></li>
                             </ul>
-                            @endif
+                            <?php endif; ?>
 
-                            @if($product->vendor_id==NULL)
+                            <?php if($product->vendor_id==NULL): ?>
                             <p>Queres Saber o que?</p>
-                            @else
+                            <?php else: ?>
                             <p></p>
-                            @endif
+                            <?php endif; ?>
                             <p></p>
                         </div>
                         <div class="tab-pane fade" id="Reviews">
@@ -535,19 +539,20 @@
                 </div>
                 <div class="col-12">
                     <div class="row related-products">
-                        @foreach($relatedProduct as $product)
+                        <?php $__currentLoopData = $relatedProduct; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="col-lg-3 col-md-4 col-12 col-sm-6">
                             <div class="product-cart-wrap hover-up">
                                 <div class="product-img-action-wrap">
                                     <div class="product-img product-img-zoom">
-                                        <a href="{{ url('product/details/'.$product->id.'/'.$product->product_slug) }}"
+                                        <a href="<?php echo e(url('product/details/'.$product->id.'/'.$product->product_slug)); ?>"
                                             tabindex="0">
-                                            @if ($product->getFirstMedia('cover'))
-                                            {{ $product->getFirstMedia('cover')->img()->attributes(["style" => 'width:400px; height:200px;']) }}
-                                            @else
-                                            <img src="{{ asset('upload/no_image.jpg') }}"
+                                            <?php if($product->getFirstMedia('cover')): ?>
+                                            <?php echo e($product->getFirstMedia('cover')->img()->attributes(["style" => 'width:400px; height:200px;'])); ?>
+
+                                            <?php else: ?>
+                                            <img src="<?php echo e(asset('upload/no_image.jpg')); ?>"
                                                 style="width:400px; height:200px;" alt="No image available">
-                                            @endif
+                                            <?php endif; ?>
                                         </a>
                                     </div>
                                     <div class="product-action-1">
@@ -559,37 +564,37 @@
                                             data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                     </div>
                                     <div class="product-badges product-badges-position product-badges-mrg">
-                                        @php
+                                        <?php
                                         $amount = $product->selling_price - $product->discount_price;
                                         $discount = ($amount / $product->selling_price) * 100;
-                                        @endphp
-                                        @if($product->discount_price === NULL || $product->discount_price == 0)
+                                        ?>
+                                        <?php if($product->discount_price === NULL || $product->discount_price == 0): ?>
                                         <span class="new">Novo</span>
-                                        @else
-                                        <span class="hot">{{ round($discount) }}%</span>
-                                        @endif
+                                        <?php else: ?>
+                                        <span class="hot"><?php echo e(round($discount)); ?>%</span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                                 <div class="product-content-wrap">
-                                    <h2><a href="{{ url('product/details/'.$product->id.'/'.$product->product_slug) }}"
-                                            tabindex="0">{{ $product->product_name }}</a></h2>
+                                    <h2><a href="<?php echo e(url('product/details/'.$product->id.'/'.$product->product_slug)); ?>"
+                                            tabindex="0"><?php echo e($product->product_name); ?></a></h2>
                                     <div class="rating-result" title="90%">
                                         <span> </span>
                                     </div>
-                                    @if($product->discount_price === NULL || $product->discount_price == 0)
+                                    <?php if($product->discount_price === NULL || $product->discount_price == 0): ?>
                                     <div class="product-price">
-                                        <span>{{ $product->selling_price }} Mzn</span>
+                                        <span><?php echo e($product->selling_price); ?> Mzn</span>
                                     </div>
-                                    @else
+                                    <?php else: ?>
                                     <div class="product-price">
-                                        <span>{{ $product->discount_price }} Mzn</span>
-                                        <span class="old-price">{{ $product->selling_price }} Mzn</span>
+                                        <span><?php echo e($product->discount_price); ?> Mzn</span>
+                                        <span class="old-price"><?php echo e($product->selling_price); ?> Mzn</span>
                                     </div>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div> <!-- Fim da coluna do produto -->
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div> <!-- Fim da linha de produtos relacionados -->
                 </div> <!-- Fim da coluna -->
             </div> <!-- Fim da linha principal -->
@@ -608,10 +613,10 @@
         var size = $('#_size').val();
         var quantity = $('#qtd').val();
         $.ajax({
-            url: @json(route('addToCard', ['id' => $product->id])),
+            url: <?php echo json_encode(route('addToCard', ['id' => $product->id]), 512) ?>,
             type: 'POST',
             data: {
-                _token: '{{ csrf_token() }}', // Token CSRF do Laravel
+                _token: '<?php echo e(csrf_token()); ?>', // Token CSRF do Laravel
                 color: color,
                 size: size,
                 quantity: quantity
@@ -629,4 +634,5 @@
     });
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('frontend.master_dashboard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Cuata\Desktop\starshop\resources\views/frontend/product/product_details.blade.php ENDPATH**/ ?>

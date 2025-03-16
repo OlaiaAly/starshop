@@ -20,6 +20,9 @@ use App\Http\Controllers\Frontend\CartController;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
 
+// Carrega as rotas de autenticação
+require __DIR__.'/auth.php';
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -52,10 +55,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+
 });
 
-// Carrega as rotas de autenticação
-require __DIR__.'/auth.php';
 
 /*
 |--------------------------------------------------------------------------
@@ -272,25 +276,44 @@ Route::middleware(['auth', 'role:admin'])->group(function() {
     });
 });
 
-///Frontend
-Route::get('ticket/details/{id}/{slug}', [IndexController::Class, 'TicketDetails']);
-Route::get('product/details/{id}/{slug}', [IndexController::Class, 'ProductDetails']);
-Route::get('vendor/details/{id}', [IndexController::Class, 'VendorDetails'])->name('vendor.details');
-Route::get('vendor/all}', [IndexController::Class, 'VendorAll'])->name('vendor.all');
-Route::get('product/category/{id}/{slug}', [IndexController::Class, 'CatWiseProduct']);
-Route::get('product/subcategory/{id}/{slug}', [IndexController::Class, 'SubCatWiseProduct']);
-Route::get('/product/view/model/{id}/', [IndexController::Class, 'ProductViewAjax']);
-
-Route::post('/cart/data/store/{id}/', [CartController::Class, 'AddToCart']);
-Route::get('/product/mini/cart', [CartController::Class, 'AddMiniCart']);
 
 
-Route::get('/ticket/view/model/{id}/', [IndexController::Class, 'TicketViewAjax']);
 
-// Rota para exibir todos os tickets
-Route::get('/tickets', [IndexController::class, 'showAllTickets'])->name('ticket.show.all');
+/**
+ * User Profile Management Routes.
+ * @author Aly Olaia
+ */
+Route::controller(IndexController::class)->group(function () {
+    ///Frontend
+    Route::get('ticket/details/{id}/{slug}', 'TicketDetails');
+    Route::get('product/details/{id}/{slug}', 'ProductDetails')->name('product.details');
+    Route::get('vendor/details/{id}','VendorDetails')->name('vendor.details');
+    Route::get('vendor/all}', 'VendorAll')->name('vendor.all');
+    Route::get('product/category/{id}/{slug}', 'CatWiseProduct');
+    Route::get('product/subcategory/{id}/{slug}', 'SubCatWiseProduct');
+    Route::get('/product/view/model/{id}/', 'ProductViewAjax');
+    
+    // Rota para exibir todos os tickets
+    Route::get('/tickets', 'showAllTickets')->name('ticket.show.all');
+    Route::get('/ticket/view/model/{id}/', 'TicketViewAjax');
+    
+});
 
 
+
+
+
+/**
+ * User Profile Management Routes.
+ * @author Aly Olaia
+ */
+Route::controller(CartController::class)->group(function () {
+    Route::post('/cart/data/store/{id}/', 'AddToCart')->name('addToCard');
+    Route::get('/product/mini/cart', 'AddMiniCart')->name('xd');
+    Route::get('list-cart-items', 'openCard')->name('cardItems');
+    Route::get('alter-cart-items', 'changeItems')->name('changeItems');
+    Route::get('delete-card-items', 'deleteItem')->name('deleteItem');
+});
 
 
 

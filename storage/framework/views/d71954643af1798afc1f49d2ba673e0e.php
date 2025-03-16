@@ -1,6 +1,6 @@
-@php 
+<?php 
 $featured = App\Models\Product::where('status', 1)->orderBy('id', 'DESC')->limit(6)->get();
-@endphp
+?>
 
 <section class="section-padding pb-5">
     <div class="container">
@@ -19,20 +19,21 @@ $featured = App\Models\Product::where('status', 1)->orderBy('id', 'DESC')->limit
                         <div class="carausel-4-columns-cover arrow-center position-relative">
                             <div class="slider-arrow slider-arrow-2 carausel-4-columns-arrow" id="carausel-4-columns-arrows"></div>
                             <div class="carausel-4-columns carausel-arrow-center" id="carausel-4-columns">
-                                @foreach($featured as $product)
-                                    @if(!empty($product->discount_price) && $product->discount_price > 0) <!-- Verifica se o produto tem desconto -->
+                                <?php $__currentLoopData = $featured; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <?php if(!empty($product->discount_price) && $product->discount_price > 0): ?> <!-- Verifica se o produto tem desconto -->
                                         <div class="product-cart-wrap">
                                             <div class="product-img-action-wrap">
                                                 <div class="product-img product-img-zoom">
-                                                    <a href="{{ url('product/details/' . $product->id . '/' . $product->product_slug) }}">
-                                                        @php
+                                                    <a href="<?php echo e(url('product/details/' . $product->id . '/' . $product->product_slug)); ?>">
+                                                        <?php
                                                             $image = $product->getFirstMedia('cover');
-                                                        @endphp
-                                                        @if ($image)
-                                                            {{ $image->img()->attributes(["style" => 'width:400px; height:200px;']) }}
-                                                        @else
-                                                            <img src="{{ asset('upload/no_image.jpg') }}" style="width:400px; height:200px;" alt="No image available">
-                                                        @endif
+                                                        ?>
+                                                        <?php if($image): ?>
+                                                            <?php echo e($image->img()->attributes(["style" => 'width:400px; height:200px;'])); ?>
+
+                                                        <?php else: ?>
+                                                            <img src="<?php echo e(asset('upload/no_image.jpg')); ?>" style="width:400px; height:200px;" alt="No image available">
+                                                        <?php endif; ?>
                                                     </a>
                                                 </div>
                                                 <div class="product-action-1">
@@ -40,23 +41,24 @@ $featured = App\Models\Product::where('status', 1)->orderBy('id', 'DESC')->limit
                                                     <a aria-label="Compare" class="action-btn" href="#"><i class="fi-rs-shuffle"></i></a>
                                                     <a aria-label="Quick view" class="action-btn" data-bs-toggle="modal" data-bs-target="#quickViewModal"><i class="fi-rs-eye"></i></a>
                                                 </div>
-                                                @php
+                                                <?php
                                                     $sellingPrice = $product->selling_price ?? 0;
                                                     $discountPrice = $product->discount_price ?? 0;
                                                     $amount = $sellingPrice - $discountPrice;
                                                     $discount = ($sellingPrice > 0) ? ($amount / $sellingPrice) * 100 : 0;
-                                                @endphp
+                                                ?>
                                                 <div class="product-badges product-badges-position product-badges-mrg">
-                                                    <span class="hot">{{ round($discount) }}%</span>
+                                                    <span class="hot"><?php echo e(round($discount)); ?>%</span>
                                                 </div>
                                             </div>
                                             <div class="product-content-wrap">
                                                 <div class="product-category">
-                                                    <a href="#">{{ $product['category']['category_name'] ?? 'Categoria não disponível' }}</a>
+                                                    <a href="#"><?php echo e($product['category']['category_name'] ?? 'Categoria não disponível'); ?></a>
                                                 </div>
                                                 <h2>
-                                                    <a href="{{ url('product/details/' . $product->id . '/' . $product->product_slug) }}">
-                                                        {{ $product->product_name ?? 'Nome não disponível' }}
+                                                    <a href="<?php echo e(url('product/details/' . $product->id . '/' . $product->product_slug)); ?>">
+                                                        <?php echo e($product->product_name ?? 'Nome não disponível'); ?>
+
                                                     </a>
                                                 </h2>
                                                 <div class="product-rate-cover">
@@ -66,29 +68,29 @@ $featured = App\Models\Product::where('status', 1)->orderBy('id', 'DESC')->limit
                                                     <span class="font-small ml-5 text-muted"> (4.0)</span>
                                                 </div>
                                                 <div>
-                                                    @if($product->vendor_id == NULL)
+                                                    <?php if($product->vendor_id == NULL): ?>
                                                         <span class="font-small text-muted">Por <a href="#">Proprietário</a></span>
-                                                    @else
-                                                        <span class="font-small text-muted">Por <a href="#">{{ $product['vendor']['name'] ?? 'Vendedor não disponível' }}</a></span>
-                                                    @endif
+                                                    <?php else: ?>
+                                                        <span class="font-small text-muted">Por <a href="#"><?php echo e($product['vendor']['name'] ?? 'Vendedor não disponível'); ?></a></span>
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="product-card-bottom">
                                                     <div class="product-price">
-                                                        @if($product->discount_price)
-                                                            <span>{{ $product->discount_price }} Mzn</span>
-                                                            <span class="old-price">{{ $product->selling_price }} Mzn</span>
-                                                        @else
-                                                            <span>{{ $product->selling_price ?? 'Preço não disponível' }} Mzn</span>
-                                                        @endif
+                                                        <?php if($product->discount_price): ?>
+                                                            <span><?php echo e($product->discount_price); ?> Mzn</span>
+                                                            <span class="old-price"><?php echo e($product->selling_price); ?> Mzn</span>
+                                                        <?php else: ?>
+                                                            <span><?php echo e($product->selling_price ?? 'Preço não disponível'); ?> Mzn</span>
+                                                        <?php endif; ?>
                                                     </div>
                                                     <div class="add-cart">
-                                                        <a class="add" href="{{route('product.details', ['id' => $product->id, 'slug' => 0 ])}}"><i class="fi-rs-shopping-cart mr-5"></i>Adicionar</a>
+                                                        <a class="add" href="<?php echo e(route('product.details', ['id' => $product->id, 'slug' => 0 ])); ?>"><i class="fi-rs-shopping-cart mr-5"></i>Adicionar</a>
                                                     </div>
                                                 </div>
                                             </div> <!-- End product-content-wrap -->
                                         </div> <!-- End product-cart-wrap -->
-                                    @endif
-                                @endforeach
+                                    <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div> <!-- End carausel-4-columns -->
                         </div> <!-- End carausel-4-columns-cover -->
                     </div> <!-- End tab-pane -->
@@ -154,3 +156,4 @@ $(document).ready(function(){
         });
     });
 </script>
+<?php /**PATH C:\Users\Cuata\Desktop\starshop\resources\views/frontend/home/home_features_product.blade.php ENDPATH**/ ?>

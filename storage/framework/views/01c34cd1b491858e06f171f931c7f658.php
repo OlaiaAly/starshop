@@ -34,13 +34,13 @@
                                     <a class="language-dropdown-active" href="#">English <i class="fi-rs-angle-small-down"></i></a>
                                     <ul class="language-dropdown">
                                         <li>
-                                            <a href="#"><img src="{{asset('frontend/assets/imgs/theme/flag-fr.png')}}" alt="" />Français</a>
+                                            <a href="#"><img src="<?php echo e(asset('frontend/assets/imgs/theme/flag-fr.png')); ?>" alt="" />Français</a>
                                         </li>
                                         <li>
-                                            <a href="#"><img src="{{asset('frontend/assets/imgs/theme/flag-dt.png')}}" alt="" />Deutsch</a>
+                                            <a href="#"><img src="<?php echo e(asset('frontend/assets/imgs/theme/flag-dt.png')); ?>" alt="" />Deutsch</a>
                                         </li>
                                         <li>
-                                            <a href="#"><img src="{{asset('frontend/assets/imgs/theme/flag-ru.png')}}" alt="" />Pусский</a>
+                                            <a href="#"><img src="<?php echo e(asset('frontend/assets/imgs/theme/flag-ru.png')); ?>" alt="" />Pусский</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -57,7 +57,7 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="{{url('/')}}"><img src="{{asset('frontend/assets/imgs/theme/logo.svg')}}" alt="logo" /></a>
+                        <a href="<?php echo e(url('/')); ?>"><img src="<?php echo e(asset('frontend/assets/imgs/theme/logo.svg')); ?>" alt="logo" /></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
@@ -103,14 +103,14 @@
                                
                                 <div class="header-action-icon-2">
                                     <a href="shop-wishlist.html">
-                                        <img class="svgInject" alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-heart.svg')}}" />
+                                        <img class="svgInject" alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-heart.svg')); ?>" />
                                         <span class="pro-count blue">6</span>
                                     </a>
                                     <a href="shop-wishlist.html"><span class="lable">Wishlist</span></a>
                                 </div>
                                 <div class="header-action-icon-2">
                                     <a class="mini-cart-icon" href="shop-cart.html">
-                                        <img alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-cart.svg')}}" />
+                                        <img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-cart.svg')); ?>" />
                                         <span class="pro-count blue">2</span>
                                     </a>
                                     <a href="shop-cart.html"><span class="lable">Carrinho</span></a>
@@ -118,7 +118,7 @@
                                         <ul>
                                             <li>
                                                 <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
+                                                    <a href="shop-product-right.html"><img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/shop/thumbnail-3.jpg')); ?>" /></a>
                                                 </div>
                                                 <div class="shopping-cart-title">
                                                     <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
@@ -130,7 +130,7 @@
                                             </li>
                                             <li>
                                                 <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-2.jpg')}}" /></a>
+                                                    <a href="shop-product-right.html"><img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/shop/thumbnail-2.jpg')); ?>" /></a>
                                                 </div>
                                                 <div class="shopping-cart-title">
                                                     <h4><a href="shop-product-right.html">Corduroy Shirts</a></h4>
@@ -153,16 +153,16 @@
                                     </div>
                                 </div>
                                 <div class="header-action-icon-2">
-                                    <a href="{{route('dashboard')}}">
-                                        <img class="svgInject" alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-user.svg')}}" />
+                                    <a href="<?php echo e(route('dashboard')); ?>">
+                                        <img class="svgInject" alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-user.svg')); ?>" />
                                     </a>
 
-@auth
-<a href="{{route('dashboard')}}"><span class="lable ml-0"> {{ Auth::user()->name}} </span></a>
+<?php if(auth()->guard()->check()): ?>
+<a href="<?php echo e(route('dashboard')); ?>"><span class="lable ml-0"> <?php echo e(Auth::user()->name); ?> </span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
                                             <li>
-                                                <a href="{{route('dashboard')}}"><i class="fi fi-rs-user mr-10"></i>Minha Conta</a>
+                                                <a href="<?php echo e(route('dashboard')); ?>"><i class="fi fi-rs-user mr-10"></i>Minha Conta</a>
                                             </li>
                                             <li>
                                                 <a href="page-account.html"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
@@ -177,19 +177,19 @@
                                                 <a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a>
                                             </li>
                                             <li>
-                                                <a href="{{route('user.logout')}}"><i class="fi fi-rs-sign-out mr-10"></i>Sair</a>
+                                                <a href="<?php echo e(route('user.logout')); ?>"><i class="fi fi-rs-sign-out mr-10"></i>Sair</a>
                                             </li>
                                         </ul>
                                     </div>
 
-@else
-<a href="{{route('login')}}"><span class="lable ml-0">Login</span></a>
+<?php else: ?>
+<a href="<?php echo e(route('login')); ?>"><span class="lable ml-0">Login</span></a>
 <span class="lable ml" style="margin-left:3px; margin-right:3px;">|</span>
-<a href="{{route('register')}}"><span class="lable ml-0">Candastrar</span></a>
+<a href="<?php echo e(route('register')); ?>"><span class="lable ml-0">Candastrar</span></a>
 
 
 
-@endauth
+<?php endif; ?>
 
 
 
@@ -208,9 +208,9 @@
 
 
 
-@php
+<?php
 $categories = App\Models\Category::orderBy('category_name', 'ASC')->get();
-@endphp
+?>
         <div class="header-bottom header-bottom-bg-color sticky-bar">
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
@@ -226,36 +226,36 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->get();
                             <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
                                 <div class="d-flex categori-dropdown-inner">
                                     <ul>
-                                        @foreach($categories as $item)
+                                        <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li>
-                                            <a href="{{url('product/category/'.$item->id.'/'.$item->category_slug)}}"> {{ $item->getFirstMedia('categories')?->img()?->attributes(["style" =>'width:70px; height:40px;']) }} {{$item->category_name}}</a>
+                                            <a href="<?php echo e(url('product/category/'.$item->id.'/'.$item->category_slug)); ?>"> <?php echo e($item->getFirstMedia('categories')?->img()?->attributes(["style" =>'width:70px; height:40px;'])); ?> <?php echo e($item->category_name); ?></a>
                                         </li>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ul>
                                     <ul class="end">
-                                    @foreach($categories as $item)
+                                    <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li>
-                                            <a href="{{url('product/category/'.$item->id.'/'.$item->category_slug)}}"> {{ $item->getFirstMedia('categories')?->img()?->attributes(["style" =>'width:70px; height:40px;']) }} {{$item->category_name}}</a>
+                                            <a href="<?php echo e(url('product/category/'.$item->id.'/'.$item->category_slug)); ?>"> <?php echo e($item->getFirstMedia('categories')?->img()?->attributes(["style" =>'width:70px; height:40px;'])); ?> <?php echo e($item->category_name); ?></a>
                                         </li>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </ul>
                                 </div>
                                 <div class="more_slide_open" style="display: none">
                                     <div class="d-flex categori-dropdown-inner">
                                         <ul>
                                             <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('frontend/assets/imgs/theme/icons/icon-1.svg')}}" alt="" />Milks and Dairies</a>
+                                                <a href="shop-grid-right.html"> <img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-1.svg')); ?>" alt="" />Milks and Dairies</a>
                                             </li>
                                             <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('frontend/assets/imgs/theme/icons/icon-2.svg')}}" alt="" />Clothing & beauty</a>
+                                                <a href="shop-grid-right.html"> <img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-2.svg')); ?>" alt="" />Clothing & beauty</a>
                                             </li>
                                         </ul>
                                         <ul class="end">
                                             <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('assets/imgs/theme/icons/icon-3.svg')}}" alt="" />Wines & Drinks</a>
+                                                <a href="shop-grid-right.html"> <img src="<?php echo e(asset('assets/imgs/theme/icons/icon-3.svg')); ?>" alt="" />Wines & Drinks</a>
                                             </li>
                                             <li>
-                                                <a href="shop-grid-right.html"> <img src="{{asset('assets/imgs/theme/icons/icon-4.svg')}}" alt="" />Fresh Seafood</a>
+                                                <a href="shop-grid-right.html"> <img src="<?php echo e(asset('assets/imgs/theme/icons/icon-4.svg')); ?>" alt="" />Fresh Seafood</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -268,30 +268,30 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->get();
                                 <ul>
                                     
                                     <li>
-                                        <a class="active" href="{{url('/')}}">Home  </a>
+                                        <a class="active" href="<?php echo e(url('/')); ?>">Home  </a>
                                         
                                     </li>
-@php
+<?php
 $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->get();
-@endphp
+?>
 
-@foreach($categories as $category)
+<?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li>
-                                        <a href="{{url('product/category/'.$category->id.'/'.$category->category_slug)}}">{{$category->category_name}}<i class="fi-rs-angle-down"></i></a>
+                                        <a href="<?php echo e(url('product/category/'.$category->id.'/'.$category->category_slug)); ?>"><?php echo e($category->category_name); ?><i class="fi-rs-angle-down"></i></a>
 
-                                        @php
+                                        <?php
                                         $subcategories = App\Models\SubCategory::where('category_id',$category->id)->orderBy('subcategory_name', 'ASC')->get();
-                                        @endphp
+                                        ?>
 
 
                                         <ul class="sub-menu">
-                                        @foreach($subcategories as $subcategory)
+                                        <?php $__currentLoopData = $subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $subcategory): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
 
-                                            <li><a href="{{url('product/subcategory/'.$subcategory->id.'/'.$subcategory->subcategory_slug)}}">{{$subcategory->subcategory_name}}</a></li>
-                                        @endforeach
+                                            <li><a href="<?php echo e(url('product/subcategory/'.$subcategory->id.'/'.$subcategory->subcategory_slug)); ?>"><?php echo e($subcategory->subcategory_name); ?></a></li>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </ul>
                                     </li>
-@endforeach                        
+<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>                        
                                     <li>
                                         <a href="/tickets">Tickets</a>
                                     </li>
@@ -305,7 +305,7 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
 
 
                     <div class="hotline d-none d-lg-flex">
-                        <img src="{{asset('frontend/assets/imgs/theme/icons/icon-headphone.svg')}}" alt="hotline" />
+                        <img src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-headphone.svg')); ?>" alt="hotline" />
                         <p>+258 842348705<span>Atendimento Ao Cliente 24/7</span></p>
                     </div>
                     <div class="header-action-icon-2 d-block d-lg-none">
@@ -319,20 +319,20 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
                         <div class="header-action-2">
                             <div class="header-action-icon-2">
                                 <a href="shop-wishlist.html">
-                                    <img alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-heart.svg')}}" />
+                                    <img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-heart.svg')); ?>" />
                                     <span class="pro-count white">4</span>
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
                                 <a class="mini-cart-icon" href="#">
-                                    <img alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-cart.svg')}}" />
+                                    <img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/theme/icons/icon-cart.svg')); ?>" />
                                     <span class="pro-count white">2</span>
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
                                         <li>
                                             <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
+                                                <a href="shop-product-right.html"><img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/shop/thumbnail-3.jpg')); ?>" /></a>
                                             </div>
                                             <div class="shopping-cart-title">
                                                 <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
@@ -344,7 +344,7 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
                                         </li>
                                         <li>
                                             <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-4.jpg')}}" /></a>
+                                                <a href="shop-product-right.html"><img alt="Nest" src="<?php echo e(asset('frontend/assets/imgs/shop/thumbnail-4.jpg')); ?>" /></a>
                                             </div>
                                             <div class="shopping-cart-title">
                                                 <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
@@ -371,4 +371,4 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
                 </div>
             </div>
         </div>
-    </header>
+    </header><?php /**PATH C:\Users\Cuata\Desktop\starshop\resources\views/frontend/body/header.blade.php ENDPATH**/ ?>
