@@ -158,7 +158,7 @@
                                     </a>
 
 @auth
-<a href="{{route('dashboard')}}"><span class="lable ml-0">Conta</span></a>
+<a href="{{route('dashboard')}}"><span class="lable ml-0"> {{ Auth::user()->name}} </span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
                                             <li>

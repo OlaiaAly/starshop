@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Binafy\LaravelCart\Cartable;
 
-class Product extends Model  implements HasMedia
+
+class Product extends Model  implements HasMedia, Cartable
 {
     use HasFactory;
     use InteractsWithMedia;
@@ -40,6 +42,14 @@ class Product extends Model  implements HasMedia
     {
         $this->addMediaCollection('cover')->withResponsiveImages()->singleFile();
         $this->addMediaCollection('products')->withResponsiveImages();
+    }
+
+    /**
+     * FROM CART
+     */
+    public function getPrice(): float
+    {
+        return (float) ($this->selling_price);
     }
 
 

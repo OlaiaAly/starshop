@@ -4,30 +4,30 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53827c1ca687fadfe8fdccef9c83ef3e",
+    "content-hash": "2b47033b136bfc8ef1bbfeec493d3117",
     "packages": [
         {
             "name": "binafy/laravel-cart",
-            "version": "v1.1.3",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/binafy/laravel-cart.git",
-                "reference": "529811ae12d6557233201c88a8a2fd3ca72d9f12"
+                "reference": "49114f77c9b6f71cbf9ba34bace60a1d1fa2742c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/binafy/laravel-cart/zipball/529811ae12d6557233201c88a8a2fd3ca72d9f12",
-                "reference": "529811ae12d6557233201c88a8a2fd3ca72d9f12",
+                "url": "https://api.github.com/repos/binafy/laravel-cart/zipball/49114f77c9b6f71cbf9ba34bace60a1d1fa2742c",
+                "reference": "49114f77c9b6f71cbf9ba34bace60a1d1fa2742c",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "^9.0|^10.0|^11.0",
+                "laravel/framework": ">=9.0",
                 "php": "^8.0"
             },
             "require-dev": {
                 "laravel/pint": "^1.5",
-                "orchestra/testbench": "^7.0|^8.0|^9.0",
-                "pestphp/pest-plugin-laravel": "^1.4.0|^2.0.0"
+                "orchestra/testbench": "^7.0|^8.0|^9.0|^10.0",
+                "pestphp/pest-plugin-laravel": "^1.4.0|^2.0.0|^3.1.0"
             },
             "type": "library",
             "extra": {
@@ -64,6 +64,7 @@
             "keywords": [
                 "Laravel Basket",
                 "Laravel cart",
+                "Laravel shopping cart",
                 "binafy",
                 "cart",
                 "framework",
@@ -71,16 +72,18 @@
                 "laravel cart package",
                 "laravel e-commerce",
                 "laravel package",
+                "laravel shopping",
                 "laravel-cart",
                 "laravel-cart-shop",
                 "laravel-shop",
+                "laravelshoppingcart",
                 "milwad"
             ],
             "support": {
                 "issues": "https://github.com/binafy/laravel-cart/issues",
-                "source": "https://github.com/binafy/laravel-cart/tree/v1.1.3"
+                "source": "https://github.com/binafy/laravel-cart/tree/v1.2.0"
             },
-            "time": "2025-01-28T13:59:53+00:00"
+            "time": "2025-02-25T20:34:16+00:00"
         },
         {
             "name": "brick/math",
@@ -9348,12 +9351,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

@@ -82,7 +82,7 @@ $featured = App\Models\Product::where('status', 1)->orderBy('id', 'DESC')->limit
                                                         @endif
                                                     </div>
                                                     <div class="add-cart">
-                                                        <a class="add" href="#"><i class="fi-rs-shopping-cart mr-5"></i>Adicionar</a>
+                                                        <a class="add" href="{{route('product.details', ['id' => $product->id, 'slug' => 0 ])}}"><i class="fi-rs-shopping-cart mr-5"></i>Adicionar</a>
                                                     </div>
                                                 </div>
                                             </div> <!-- End product-content-wrap -->
