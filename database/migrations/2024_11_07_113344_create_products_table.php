@@ -19,12 +19,12 @@ return new class extends Migration
             $table->string('product_name');
             $table->string('product_slug');
             $table->string('product_code');
-            $table->string('product_qty');
+            $table->unsignedInteger('product_qty')->default(0);
             $table->string('product_tags')->nullable();
             $table->string('product_size')->nullable();
             $table->string('product_color')->nullable();
             $table->string('selling_price');
-            $table->string('discount_price')->nullable();
+            $table->decimal('discount_price', 8,2)->nullable();
             $table->text('short_descp');
             $table->text('long_descp');
             // $table->string('productthambnail');

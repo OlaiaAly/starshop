@@ -734,3 +734,13 @@
     });
 })(jQuery);
 
+function formatCurrency(value) {
+    return value.toLocaleString('pt-MZ', {
+        style: 'currency',
+        currency: 'MZN',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+}
+
+

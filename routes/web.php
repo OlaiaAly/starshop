@@ -16,7 +16,7 @@ use App\Http\Controllers\Backend\TicketController;
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
-
+use App\Http\Controllers\PaymentCroller;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
 
@@ -307,16 +307,16 @@ Route::controller(IndexController::class)->group(function () {
  * User Profile Management Routes.
  * @author Aly Olaia
  */
-Route::controller(CartController::class)->group(function () {
+Route::controller(CartController::class)->middleware('auth')->group(function () {
     Route::post('/cart/data/store/{id}/', 'AddToCart')->name('addToCard');
     Route::get('/product/mini/cart', 'AddMiniCart')->name('xd');
-    Route::get('list-cart-items', 'openCard')->name('cardItems');
+    Route::get('list-cart-items', 'openCard')->name('openCard');
     Route::get('alter-cart-items', 'changeItems')->name('changeItems');
-    Route::get('delete-card-items', 'deleteItem')->name('deleteItem');
+    Route::get('delete-card-items/{id}', 'deleteItem')->name('deleteItem');
 });
 
 
-
-
-
-
+Route::controller(PaymentCroller::class)->middleware('auth')->group(function () {
+    Route::get('/checkout', 'index')->name('checkout');
+    Route::post('/pay', 'pay')->name('pay');
+});

@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
+            $table->string('coupon_code')->nullable()->after('total_price'); // Código do cupom
+            $table->decimal('discount_amount', 10, 2)->default(0)->after('coupon_code'); // Valor do desconto
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Cliente
+            $table->decimal('total_price', 10, 2); // Preço total da venda
+            $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade'); // Relaciona com o produto
+
+            $table->enum('status', ['pending', 'paid', 'canceled'])->default('pending'); // Status da venda
+            $table->timestamps(); // created_at & updated_at$table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('sales');
+    }
+};

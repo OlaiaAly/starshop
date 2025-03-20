@@ -30,16 +30,44 @@
 <!-- CSS do Slick Carousel -->
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick-theme.css"/>
-
+<!-- SWEET ALERT -->
+<link rel="stylesheet" href="{{asset('frontend\assets\css\sweetalert2.css')}}" />
 <!-- jQuery (necessário para o Slick Carousel) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- JS do Slick Carousel -->
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel/slick/slick.min.js"></script>
 
+<!-- LOADING -->
+ <link rel="stylesheet" href="{{asset('frontend\assets\css\loading.css')}}" />
+ 
+<!-- SWEAT ALERT -->
+<script src="{{asset('frontend\assets\js\sweetalert2.js')}}"></script>
 </head>
 
 <body>
+
+    @if (session('success'))
+        <div class="alert success" style="position: fixed; top: 10px; right: 10px; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; z-index: 1000;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert error" style="position: fixed; top: 10px; right: 10px; padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.alert').forEach(el => el.style.display = 'none');
+            }, 3000); // Esconde após 3 segundos
+        });
+    </script>
+
+
     <!-- Modal -->
  
     <!-- Quick view -->
@@ -99,7 +127,7 @@
                                     </li>
                                     <li><a href="shop-filter.html">Shop – Filter</a></li>
                                     <li><a href="shop-wishlist.html">Shop – Wishlist</a></li>
-                                    <li><a href="shop-cart.html">Shop – Cart</a></li>
+                                    <li><a href="{route('openCard')}">Shop – Cart</a></li>
                                     <li><a href="shop-checkout.html">Shop – Checkout</a></li>
                                     <li><a href="shop-compare.html">Shop – Compare</a></li>
                                     <li class="menu-item-has-children">
@@ -267,7 +295,11 @@
     <script src="{{asset('frontend/assets/js/main.js?v=5.3')}}"></script>
     <script src="{{asset('frontend/assets/js/shop.js?v=5.3')}}"></script>
 
+    <script src="{{asset('frontend/assets/js/shop.js?v=5.3')}}"></script>
+
+
 <script type="text/javascript">
+
 $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -388,6 +420,7 @@ function miniCart(){
 }
 
 </script>
+<div id="loading">Loading&#8330;</div>
 </body>
 
 </html>

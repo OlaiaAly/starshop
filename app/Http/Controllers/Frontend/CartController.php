@@ -14,30 +14,56 @@ class CartController extends Controller
 {
     public function AddToCart(Request $request, $id)
     {
-        $productId = $id;
-        $color = $request->color;
-        $size = $request->size;
-        $quantity = $request->quantity;
 
-        // Retrieve product information from your database (example)
-        $product = \App\Models\Product::find($productId);
+        try {
 
-        // return response()->json([$product]);
-        if ($product) {
-            Cart::storeItem([
-                'id' => $productId,
-                'name' => $product->name,
-                'price' => $product->price,
+            // Retrieve the product
+            $product = Product::findOrFail($id);
+
+            if (!$product) {
+                return response()->json(['error' => 'Product not found.'], 404);
+            }    
+            
+            $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
+            
+            $quantity = $request->quantity??1;
+            $price = $product->getPrice();
+            $subtotal = $price * $quantity;
+            $options = $request->options??[];
+            $options = json_encode($options);
+
+            $cartItem = new CartItem([
+                'itemable_id' => $product->id,
+                'options'  => $options,
+                'price'    => $price,
+                'itemable' => $product,
+                'itemable_type' => Product::class,
+                'subtotal' => $subtotal,
                 'quantity' => $quantity,
-                'attributes' => [
-                    'color' => $color,
-                    'size' => $size,
-                ],
             ]);
             
-            return response()->json(['success' => 'Adicionado com sucesso no Carrinho']);
-        }
+            
+            $cart->items()->save($cartItem);
 
+            if($this->updateTotalPrice($cart)){
+                return response()->json(['message' => 'Product added to cart.'], 200);
+            }
+            return response()->json(['error' => 'An error occurred.'], 500);
+            
+            
+            
+            // LaravelCart::storeItem([
+            //     'price'    => $price,
+            //     'itemable' => $product,
+            //     'subtotal' => $subtotal,
+            //     'quantity' => $quantity,
+            //     'options'  => $options,
+            // ], $request->user()->id);
+            
+        } catch (\Throwable $th) {
+            // Log::error('Error adding to cart: ' . $th->getMessage());
+            return response()->json(['error' => 'An error occurred.'], 500);
+        }
     }
     
     public function AddMiniCart(Request $request){
@@ -69,10 +95,16 @@ class CartController extends Controller
     }
 
 
-    public function openCard(Request $request){
-        $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
+    public function openCard(){
+
+        // return redirect()->back()->with('success', 'Venda realizada com sucesso!');
+
+        $user = auth()->user();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $cart->load('items');
+        return view('frontend.product.shop-cart', compact('cart'));
+
         if ($cart) {
-            $cartItems = $cart->items;
             foreach ($cartItems as $cartItem) {
                 // Access item details
                 $itemable = $cartItem->itemable; // The related model (e.g., Product)
@@ -80,10 +112,10 @@ class CartController extends Controller
                 
                 echo "Product: " . $itemable->product_name . ", Quantity: " . $quantity . "<br>";
 
-                 // Decode the JSON options
-                 $options = json_decode($cartItem->options, true);
-
-                    // Display the options
+                // Decode the JSON options
+                $options = json_decode($cartItem->options, true);
+                
+                // Display the options
                 if ($options) {
                     echo ", Options: ";
                     foreach ($options as $key => $value) {
@@ -91,7 +123,7 @@ class CartController extends Controller
                     }
                 }
                 echo "<br>";
-
+                
             }
         } else {
             echo "Cart not found.";
@@ -100,7 +132,18 @@ class CartController extends Controller
     }
 
     public function changeItems(Request $request){
+        
         $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
+        $cart->load('items');
+        $cart->total = $cart->items->sum(function ($item) {
+            return $item->quantity * $item->price; // Adjust based on your structure
+        });
+        $cart->save();
+    
+        return redirect()->back()->with('success', 'Venda realizada com sucesso!');
+        
+
+        //OLD
         // $cartItem = $cart->items->find($carItemId);
         $cartItem = $cart->items->find(1);
 
@@ -120,7 +163,7 @@ class CartController extends Controller
         return response()->json(['success' => 'Registo alterado com sucesso!'], 200);
     }
 
-    public function deleteItem (Request $id){
+    public function deleteItem ($id){
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
 
@@ -133,7 +176,7 @@ class CartController extends Controller
        //REMOVE BY PRODUCT
        //$cart->removeItem($product);
 
-        $cartItem = $cart->items->find(1);
+        $cartItem = $cart->items->find($id);
 
         if (!$cartItem) {
             // Handle the case where the cart item is not found
@@ -142,6 +185,27 @@ class CartController extends Controller
 
         $cartItem->delete();
 
-        return response()->json(['success' => ' ITEM APAGADO COM SUCESSO'], 200);
+        if( $this->updateTotalPrice($cart)){
+            return $this->openCard();
+            // return response()->json(['success' => ' ITEM APAGADO COM SUCESSO'], 200);
+        }
+
+        throw new \Exception("Error deleting item from cart");
+    }
+
+
+    //UTILITIES
+    static public function updateTotalPrice($cart)
+    {
+        if($cart){
+            $cart->load('items');
+            $cart->total = $cart->items->sum(function ($item) {
+                return $item->quantity * $item->price;
+            });
+            $cart->save();
+
+            return  true;
+        }
+        return false;
     }
 }
