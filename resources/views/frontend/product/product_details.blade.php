@@ -1,5 +1,6 @@
 @extends('frontend.master_dashboard')
 @section('main')
+
 <div class="page-header breadcrumb-wrap">
     <div class="container">
         <div class="breadcrumb">
@@ -71,25 +72,20 @@
                                 </div>
                             </div>
                             <div class="clearfix product-price-cover">
-                                @php
-                                $amount= $product->selling_price - $product->discount_price;
-                                $discount = ($amount/$product->selling_price)*100;
-                                @endphp
-
-                                @if($product->discount_price === NULL || $product->discount_price == 0) <div
-                                    class="product-price primary-color float-left">
-                                    <span class="current-price text-brand">{{$product->selling_price}} Mzn</span>
-
+                                <div  class="product-price primary-color float-left">
+                                    <span class="current-price text-brand">{{$product->getPrice()}} Mzn</span>
                                 </div>
-                                @else
+
+
+                            {{--
                                 <div class="product-price primary-color float-left">
-                                    <span class="current-price text-brand">{{$product->discount_price}} Mzn</span>
+                                    <span class="current-price text-brand">X Mzn</span>
                                     <span>
-                                        <span class="save-price font-md color3 ml-15">-{{round($discount)}}%</span>
-                                        <span class="old-price font-md ml-15">{{$product->selling_price}} Mzn</span>
+                                        <span class="save-price font-md color3 ml-15">-X %</span>
+                                        <span class="old-price font-md ml-15">X  Mzn</span>
                                     </span>
-                                </div>
-                                @endif
+                                </div> --}}
+                            
 
                             </div>
                             <div class="short-desc mb-30">
@@ -602,31 +598,81 @@
 
 <script>
     $(document).ready(function() {
-    $('#add-to-cart').click(function(e) {
-        e.preventDefault();
-        var color = $('#_color').val();
-        var size = $('#_size').val();
-        var quantity = $('#qtd').val();
+
+
+        
+        
+        $('#add-to-cart').click(function(e) {
+            e.preventDefault();
+            var color = $('#_color').val();
+            var size = $('#_size').val();
+            var quantity = $('#qtd').val();
+
         $.ajax({
             url: @json(route('addToCard', ['id' => $product->id])),
             type: 'POST',
             data: {
                 _token: '{{ csrf_token() }}', // Token CSRF do Laravel
-                color: color,
-                size: size,
-                quantity: quantity
+                quantity: quantity,
+                options:{
+                    color: color,
+                    size: size
+                }
             },
             success: function(response) {
                 console.log(response);
+                Swal.fire({
+                    title: "Adicionado com sucesso!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 $('#cart-message').html('<div class="alert alert-success">' + response.success + '</div>');
                 // Atualizar o mini carrinho ou outras partes da página
             },
+            beforeSend: function () {
+                    $('#loading').show();
+                },
+            complete: function () {
+                $('#loading').hide();
+                updateCartButton($('#add-to-cart'));
+            },
             error: function(xhr, status, error) {
+                Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "My bad...!",
+                });
                 $('#cart-message').html('<div class="alert alert-danger">Erro ao adicionar ao carrinho.</div>');
                 console.error(xhr.responseText);
             }
         });
     });
+
+    //ACTUALIZAR O BOTÃO DO CARRINHO	
+    function updateCartButton(button) {
+        button.html('<i class="fi-rs-check"></i> Adicionado'); // Altera o ícone e o texto
+        button.prop("disabled", true); // Desabilita o botão temporariamente
+        button.css({
+            "ponter-events": "none",
+            "cursor": "not-allowed",
+            "opacity": "0.5"
+        }); // Desabilita o clique no botão
+
+        //DESATIVAR BOOTAR
+        $('#_color').prop({
+            disabled: true,
+            readyonly: true
+        });
+        $('#_size').prop({
+            disabled: true,
+            readyonly: true
+        });
+        $('#qtd').prop({
+            disabled: true,
+            readyonly: true
+        });
+    }
 });
 </script>
 @endsection

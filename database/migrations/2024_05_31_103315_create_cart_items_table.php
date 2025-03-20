@@ -21,6 +21,8 @@ return new class extends Migration
             $table->foreignId($cartForeignName)->constrained($cartTableName)->cascadeOnDelete();
             $table->morphs('itemable');
             $table->unsignedInteger('quantity')->default(1);
+            $table->decimal('price', 8, 2)->default(0);
+            $table->decimal('subtotal', 8, 2)->default(0);
             $table->json('options')->nullable();  // For more complex options (JSON)            
             $table->timestamps();
             // Add other columns as needed

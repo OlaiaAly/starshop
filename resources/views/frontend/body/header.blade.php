@@ -113,7 +113,7 @@
                                         <img alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-cart.svg')}}" />
                                         <span class="pro-count blue">2</span>
                                     </a>
-                                    <a href="shop-cart.html"><span class="lable">Carrinho</span></a>
+                                    <a href="{{route('openCard')}}"><span class="lable">Carrinhos</span></a>
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul>
                                             <li>
@@ -146,7 +146,7 @@
                                                 <h4>Total <span>$4000.00</span></h4>
                                             </div>
                                             <div class="shopping-cart-button">
-                                                <a href="shop-cart.html" class="outline">View cart</a>
+                                                <a href="{{route('openCard')}}" class="outline">View cart</a>
                                                 <a href="shop-checkout.html">Checkout</a>
                                             </div>
                                         </div>
@@ -324,7 +324,7 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
                                 </a>
                             </div>
                             <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="#">
+                                <a class="mini-cart-icon" href="{route('openCard')}}">
                                     <img alt="Nest" src="{{asset('frontend/assets/imgs/theme/icons/icon-cart.svg')}}" />
                                     <span class="pro-count white">2</span>
                                 </a>

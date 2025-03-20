@@ -23,6 +23,28 @@
    
    @include('frontend.body.header')
 
+
+   @if (session('success'))
+        <div class="alert success" style="position: fixed; top: 10px; right: 10px; padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px; z-index: 1000;">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session('error'))
+        <div class="alert error" style="position: fixed; top: 10px; right: 10px; padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px; z-index: 1000;">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelectorAll('.alert').forEach(el => el.style.display = 'none');
+            }, 3000); // Esconde após 3 segundos
+        });
+    </script>
+
     <!--End header-->
 
     <main class="main pages">

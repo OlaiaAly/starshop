@@ -59,9 +59,9 @@ class UserTableSeeder extends Seeder
             [
 
                 'name'=> 'Aly Olaia',
-                'username'=>'olaiaaly@gmail.com',
-                'email'=>'olaiaaly@gmail.com',
-                'password'=> Hash::make('olaiaaly@gmail.com'),
+                'username'=>'admin@starshop.com',
+                'email'=>'admin@starshop.com',
+                'password'=> Hash::make('admin@starshop.com'),
                 'role'=>'user',
                 'status'=>'active'
             ],

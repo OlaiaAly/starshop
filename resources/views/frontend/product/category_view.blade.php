@@ -1,5 +1,6 @@
 @extends('frontend.master_dashboard')
 @section('main')
+<div id="loading">Loading&#8330;</div>
 
 <div class="page-header mt-30 mb-50">
     <div class="container">
