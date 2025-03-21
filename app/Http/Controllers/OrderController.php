@@ -34,9 +34,7 @@ class OrderController extends Controller
 
         
            
-        $total = $cart->total;
-        $discount = 0;
-        $couponCode = $cart->coupon->code??null;
+      
 
         if ($couponCode) {
             $coupon = Coupon::where('code', $couponCode)->first();
@@ -52,7 +50,6 @@ class OrderController extends Controller
             }
         }
 
-        $finalPrice = max(0, $total - $discount); // Garante que o valor final não seja negativo
 
         $order = Order::create([
             'user_id' => Auth::id(),
