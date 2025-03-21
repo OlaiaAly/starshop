@@ -311,7 +311,7 @@ Route::controller(CartController::class)->middleware('auth')->group(function () 
     Route::post('/cart/data/store/{id}/', 'AddToCart')->name('addToCard');
     Route::get('/product/mini/cart', 'AddMiniCart')->name('xd');
     Route::get('list-cart-items', 'openCard')->name('openCard');
-    Route::get('alter-cart-items', 'changeItems')->name('changeItems');
+    Route::post('alter-cart-items', 'changeItems')->name('changeItems');
     Route::get('delete-card-items/{id}', 'deleteItem')->name('deleteItem');
     Route::get('/cart/clear/{id}', 'emptyCart')->name('clear-cart');
     Route::post('aply-coupon', 'applyCoupon')->name('applyCoupon');

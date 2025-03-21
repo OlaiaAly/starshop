@@ -1,5 +1,5 @@
-﻿@extends('frontend.master_dashboard')
-@section('main')
+﻿
+<?php $__env->startSection('main'); ?>
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
@@ -14,9 +14,9 @@
                 <div class="col-lg-8 mb-40">
                     <h1 class="heading-2 mb-10">Your Cart</h1>
                     <div class="d-flex justify-content-between">
-                        <h6 class="text-body">There are <span class="text-brand">{{$cart->items->count()}}</span> products in your cart</h6>
-                        <h6 class="text-body"><a class="text-muted" onclick="deleteGeneral(`clear_card_{{$cart->id}}`, '', '', 'Tem certeza que deseja esvaziar o carrinho?')"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
-                        <form  id="clear_card_{{$cart->id}}" action="{{route('clear-cart', $cart->id)}}" method="get"></form>
+                        <h6 class="text-body">There are <span class="text-brand"><?php echo e($cart->items->count()); ?></span> products in your cart</h6>
+                        <h6 class="text-body"><a class="text-muted" onclick="deleteGeneral(`clear_card_<?php echo e($cart->id); ?>`, '', '', 'Tem certeza que deseja esvaziar o carrinho?')"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
+                        <form  id="clear_card_<?php echo e($cart->id); ?>" action="<?php echo e(route('clear-cart', $cart->id)); ?>" method="get"></form>
                         
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($cart->items as $cartItem)
+                                <?php $__currentLoopData = $cart->items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cartItem): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <tr class="pt-30">
                                     <td class="custome-checkbox pl-30">
                                         <input class="form-check-input" type="checkbox" name="checkbox" id="exampleCheckbox1" value="">
@@ -47,7 +47,7 @@
                                     </td>
                                     <td class="image product-thumbnail pt-40"><img src="assets/imgs/shop/product-1-1.jpg" alt="#"></td>
                                     <td class="product-des product-name">
-                                        <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="shop-product-right.html">{{$cartItem->itemable->product_name}}</a></h6>
+                                        <h6 class="mb-5"><a class="product-name mb-10 text-heading" href="shop-product-right.html"><?php echo e($cartItem->itemable->product_name); ?></a></h6>
                                         <div class="product-rate-cover">
                                             <div class="product-rate d-inline-block">
                                                 <div class="product-rating" style="width:90%">
@@ -58,25 +58,18 @@
                                     </td>
                                     <td class="price" data-title="Price">
                                         <h4 class="text-body">
-                                            {{ number_format($cartItem->price, 2, '.', ' ') . ' MZN' }}
+                                            <?php echo e(number_format($cartItem->price, 2, '.', ' ') . ' MZN'); ?>
+
 
                                         </h4>
                                     </td>
-                                    {{-- <td class="text-center detail-info" data-title="Stock">
-                                        <div class="detail-extralink mr-15">
-                                            <div class="detail-qty border radius">
-                                                <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
-                                                <input type="text" name="quantity" class="qty-val" value="{{$cartItem->quantity}}" min="1">
-                                                <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
-                                            </div>
-                                        </div>
-                                    </td> --}}
+                                    
                                     <td class="text-center detail-info" data-title="Stock">
                                         <div class="detail-extralink mr-15">
                                             <div class="detail-qty border radius">
                                                 <!-- <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a> -->
                                                 <input type="number" name="quantity" class="qty-val update-quantity"
-                                                    data-id="{{$cartItem->id}}" value="{{$cartItem->quantity}}" min="1">
+                                                    data-id="<?php echo e($cartItem->id); ?>" value="<?php echo e($cartItem->quantity); ?>" min="1">
                                                 <!-- <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a> -->
                                             </div>
                                         </div>
@@ -84,14 +77,15 @@
 
                                     <td class="price" data-title="Price">
                                         <h4 class="text-brand">
-                                        {{ number_format($cartItem->subtotal, 2, '.', ' ') . ' MZN' }}
+                                        <?php echo e(number_format($cartItem->subtotal, 2, '.', ' ') . ' MZN'); ?>
+
 
                                          </h4>
                                     </td>
-                                    <td class="action text-center" data-title="Remove"><a href="#" class="text-body" onclick="deleteGeneral(`{{'delete_item_'.$cartItem->id}}`, ` o Item`)"><i class="fi-rs-trash"></i></a></td>
-                                    <form  id="delete_item_{{$cartItem->id}}" action="{{route('deleteItem', $cartItem->id)}}" method="get"></form>
+                                    <td class="action text-center" data-title="Remove"><a href="#" class="text-body" onclick="deleteGeneral(`<?php echo e('delete_item_'.$cartItem->id); ?>`, ` o Item`)"><i class="fi-rs-trash"></i></a></td>
+                                    <form  id="delete_item_<?php echo e($cartItem->id); ?>" action="<?php echo e(route('deleteItem', $cartItem->id)); ?>" method="get"></form>
                                 </tr>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </tbody>
                         </table>
                     </div>
@@ -103,8 +97,8 @@
                             <div class="p-40">
                                 <h4 class="mb-10">Apply Coupon</h4>
                                 <p class="mb-30"><span class="font-lg text-muted">Using A Promo Code?</p>
-                                <form action="{{route('applyCoupon')}}" method="post">
-                                    @csrf
+                                <form action="<?php echo e(route('applyCoupon')); ?>" method="post">
+                                    <?php echo csrf_field(); ?>
                                     <div class="d-flex justify-content-between">
                                         <input class="font-medium mr-15 coupon" name="coupon_code" placeholder="Enter Your Coupon">
                                         <button class="btn"><i class="fi-rs-label mr-10"></i>Apply</button>
@@ -129,7 +123,8 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h4 class="text-brand text-end">
-                                                {{ number_format($cart->total, 2, '.', ' ') . ' MZN' }}
+                                                <?php echo e(number_format($cart->total, 2, '.', ' ') . ' MZN'); ?>
+
                                             </h4>
                                         </td>
                                     </tr>
@@ -159,7 +154,8 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h4 class="text-brand text-end">
-                                            {{ number_format($cart->total, 2, '.', ' ') . ' MZN' }}
+                                            <?php echo e(number_format($cart->total, 2, '.', ' ') . ' MZN'); ?>
+
 
 
                                             </h4>
@@ -168,7 +164,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <a href="{{route('checkout')}}" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
+                        <a href="<?php echo e(route('checkout')); ?>" class="btn mb-20 w-100">Proceed To CheckOut<i class="fi-rs-sign-out ml-15"></i></a>
                     </div>
                         </div>
 
@@ -199,10 +195,10 @@
 
         // Send AJAX request
         $.ajax({
-            url: "{{ route('changeItems') }}", // Laravel route to update cart
+            url: "<?php echo e(route('changeItems')); ?>", // Laravel route to update cart
             method: "POST",
             data: {
-                _token: "{{ csrf_token() }}", // CSRF token for security
+                _token: "<?php echo e(csrf_token()); ?>", // CSRF token for security
                 id: cartItemId,
                 quantity: newQuantity
             },
@@ -257,4 +253,5 @@
 // });
 
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('frontend.master_dashboard', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Cuata\Desktop\ALY\starshop\resources\views/frontend/product/shop-cart.blade.php ENDPATH**/ ?>
