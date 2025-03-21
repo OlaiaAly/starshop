@@ -16,6 +16,11 @@ class PaymentCroller extends Controller
 {
     public function index()
     {
+
+
+        $methods = PaymentMethod::labels();
+
+
         $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
 
         $total = $cart->total;
@@ -42,7 +47,7 @@ class PaymentCroller extends Controller
 
         $finalPrice = max(0, $total - $discount); // Garante que o valor final não seja negativo
 
-        return view('frontend.product.checkout', compact('cart'));
+        return view('frontend.product.checkout', compact('cart', 'methods'));
     }
 
 
@@ -51,6 +56,7 @@ class PaymentCroller extends Controller
     
     
     public function pay(Request $request){
+
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         
@@ -62,7 +68,11 @@ class PaymentCroller extends Controller
         $discount = 0;
         $couponCode = $cart->coupon->code??null;
 
-        if(!$this->create($request)){
+        $parameters = $request->all();
+        $parameters['amount'] = $total;
+
+
+        if(!$this->create($parameters)){
             return redirect()->back()->with('error', 'Erro ao efectuar o pagamento.');
         }
         
@@ -85,21 +95,17 @@ class PaymentCroller extends Controller
     }
     
 
-    public function create(Request $request): bool{
-        $user = $request->user();
+    public function create($parameters): bool{
 
-        if(!$this->validatePaymentMethod($request)){
-            return false;
-        }
-
-        
+        $user = auth()->user();
         $payment = new MpesaService();
-        $parameters = [
-            'amount' => 200,
-            'telephone' => 845180066,
-        ];
+    
 
-        $response = $payment->C2B($parameters);
+        $response = $payment->C2B([ 
+            'amount' => $parameters['amount'],
+            'telephone' => $parameters['telephone'],
+        ]);
+
         if($response->output_error??null){
             return false;
         }
@@ -110,28 +116,13 @@ class PaymentCroller extends Controller
                 'reference' => $response->output_ThirdPartyReference,
                 'method' => PaymentMethod::M_PESA,
                 'account_number' => $parameters['telephone'],
+                'name' => $parameters['name'],
+                'email' => $parameters['email'],
+                'aaddress' => $parameters['address'],
             ]);
             return true;
         }
 
         return false;
-    }
-
-    private function  validatePaymentMethod(Request $request){
-         // Validação direta no Controller
-         $validator = Validator::make($request->all(), [
-            'method' => ['required', new Enum(PaymentMethod::class)], // Valida se é um método válido
-            'amount' => ['required', 'numeric', 'min:1'],
-        ]);
-
-        // Se falhar, retorna erro
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-     
-        }
-
-        return true;
     }
 }

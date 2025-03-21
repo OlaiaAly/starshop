@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         Artisan::call('view:clear');
         Artisan::call('route:clear');
         Artisan::call('cache:clear');
-        Artisan::call('config:cache');
+        // Artisan::call('config:cache');
         // Você pode adicionar uma mensagem para saber que os comandos foram executados
         echo "\n\n\t Cache, views, rotas e config limpos com sucesso!\n\n";
     }

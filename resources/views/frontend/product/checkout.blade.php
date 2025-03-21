@@ -69,20 +69,25 @@
 
         <input type="hidden" id="amount" value="{{$cart->total}}" readonly disabled>
         <label for="name">Nome Completo</label>
-        <input type="text" id="name" placeholder="Digite seu nome" required>
+        <input t ype="text" id="name" name="name" placeholder="Digite seu nome" required>
 
         <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Digite seu email" required>
+        <input type="email" id="email"  name="email" placeholder="Digite seu email" required>
 
         <label for="address">Endereço</label>
-        <input type="text" id="address" placeholder="Digite seu endereço" required>
+        <input type="text" id="address" name="address" placeholder="Digite seu endereço" required>
 
         <label for="payment">Método de Pagamento</label>
-        <select id="payment">
-            <option value="credit">Cartão de Crédito</option>
-            <option value="debit">Cartão de Débito</option>
-            <option value="paypal">PayPal</option>
+        <select id="payment" name="method" required>
+            @foreach($methods as $value => $label)
+                <option value="{{$value}}">{{$label}}</option>
+            @endforeach
         </select>
+
+        <label for="telephone">Telefone</label>
+        <input type="tel" pattern="8[2-7]\d{7}" id="telephone" name="telephone" 
+       placeholder="Digite seu telefone" maxlength="9" required 
+       title="8x xxx xxxx">
 
         <button type="submit" class="checkout-btn">Finalizar Compra</button>
     </form>

@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('account_number', 15)->nullable();
             $table->double('sum', 10, 2, true);
             $table->timestamps();
+            $table->string('address'); // Endereço do pagador
+            $table->string('email'); // Email do pagador
+            $table->string('name'); // Nome completo do pagador
             $table->enum('method', array_column(PaymentMethod::cases(), 'value'))->default(PaymentMethod::M_PESA->value);            
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Define a relação
         });
