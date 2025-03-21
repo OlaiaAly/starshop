@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use \Binafy\LaravelCart\Models\Cart;
@@ -94,6 +95,28 @@ class CartController extends Controller
         }
     }
 
+    public function applyCoupon(Request $request)
+    {
+        $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
+        $couponCode = $request->coupon_code;
+
+        // dd($couponCode);
+
+        if (!$couponCode) {
+            return back()->with('error', 'Nenhum código de cupom fornecido.');
+        }
+
+        $coupon = Coupon::where('code', $couponCode)->first();
+
+        if (!$coupon || !$coupon->isValid()) {
+            return back()->with('error', 'Cupom inválido ou expirado.');
+        }
+
+        $cart->coupon()->associate($coupon);
+        $cart->save();
+        
+        return back()->with('success', 'Cupom aplicado com sucesso.');
+    }
 
     public function openCard(){
 
@@ -191,6 +214,17 @@ class CartController extends Controller
         }
 
         throw new \Exception("Error deleting item from cart");
+    }
+
+
+    public function emptyCart(Request $request){
+        $user = auth()->user();
+        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $cart->emptyCart();
+        // $cart->items()->delete();
+        $cart->total = 0;
+        $cart->save();
+        return redirect()->back()->with('success', 'Carrinho esvaziado com sucesso!');
     }
 
 

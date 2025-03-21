@@ -313,6 +313,8 @@ Route::controller(CartController::class)->middleware('auth')->group(function () 
     Route::get('list-cart-items', 'openCard')->name('openCard');
     Route::get('alter-cart-items', 'changeItems')->name('changeItems');
     Route::get('delete-card-items/{id}', 'deleteItem')->name('deleteItem');
+    Route::get('/cart/clear/{id}', 'emptyCart')->name('clear-cart');
+    Route::post('aply-coupon', 'applyCoupon')->name('applyCoupon');
 });
 
 
