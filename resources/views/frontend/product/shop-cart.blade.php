@@ -15,7 +15,9 @@
                     <h1 class="heading-2 mb-10">Your Cart</h1>
                     <div class="d-flex justify-content-between">
                         <h6 class="text-body">There are <span class="text-brand">{{$cart->items->count()}}</span> products in your cart</h6>
-                        <h6 class="text-body"><a href="{{route('clear-cart', $cart->id)}}" class="text-muted"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
+                        <h6 class="text-body"><a class="text-muted" onclick="deleteGeneral(`clear_card_{{$cart->id}}`, '', '', 'Tem certeza que deseja esvaziar o carrinho?')"><i class="fi-rs-trash mr-5"></i>Clear Cart</a></h6>
+                        <form  id="clear_card_{{$cart->id}}" action="{{route('clear-cart', $cart->id)}}" method="get"></form>
+                        
                     </div>
                 </div>
             </div>
@@ -60,7 +62,7 @@
 
                                         </h4>
                                     </td>
-                                    <td class="text-center detail-info" data-title="Stock">
+                                    {{-- <td class="text-center detail-info" data-title="Stock">
                                         <div class="detail-extralink mr-15">
                                             <div class="detail-qty border radius">
                                                 <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
@@ -68,14 +70,26 @@
                                                 <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
                                             </div>
                                         </div>
+                                    </td> --}}
+                                    <td class="text-center detail-info" data-title="Stock">
+                                        <div class="detail-extralink mr-15">
+                                            <div class="detail-qty border radius">
+                                                <!-- <a href="#" class="qty-down"><i class="fi-rs-angle-small-down"></i></a> -->
+                                                <input type="number" name="quantity" class="qty-val update-quantity"
+                                                    data-id="{{$cartItem->id}}" value="{{$cartItem->quantity}}" min="1">
+                                                <!-- <a href="#" class="qty-up"><i class="fi-rs-angle-small-up"></i></a> -->
+                                            </div>
+                                        </div>
                                     </td>
+
                                     <td class="price" data-title="Price">
                                         <h4 class="text-brand">
                                         {{ number_format($cartItem->subtotal, 2, '.', ' ') . ' MZN' }}
 
                                          </h4>
                                     </td>
-                                    <td class="action text-center" data-title="Remove"><a href="{{route('deleteItem', $cartItem->id)}}" class="text-body"><i class="fi-rs-trash"></i></a></td>
+                                    <td class="action text-center" data-title="Remove"><a href="#" class="text-body" onclick="deleteGeneral(`{{'delete_item_'.$cartItem->id}}`, ` o Item`)"><i class="fi-rs-trash"></i></a></td>
+                                    <form  id="delete_item_{{$cartItem->id}}" action="{{route('deleteItem', $cartItem->id)}}" method="get"></form>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -167,24 +181,80 @@
         </div>
     </main>
     <script>
-        function  deleteGeneral(id, name, type){
-            Swal.fire({
-                title: `<small>Tem certeza, que deseja apagar a/o <br/> ${type} - ${name} ?`,
-                text: `Essa ação é irreversivel!`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sim, tenho.'
-            })
-            .then((result) => {
-                console.log(result.isConfirmed)
-                // if (result.isConfirmed) {
-                if(result.value){
-                    console.log('deleted');
-                    $(`form#delete_${id}`).submit();
-                }
-            });
+
+// $(document).ready(function () {
+    $('.update-quantity').on('click', function () {
+
+        setTimeout(function() {
+            console.log('This message appears after 3 seconds!');
+        }, 3000);
+        let cartItemId = $(this).data('id');  // Get cart item ID
+        let newQuantity = $(this).val();  // Get new quantity
+
+        // Ensure the quantity is at least 1
+        if (newQuantity < 1) {
+            $(this).val(1);
+            newQuantity = 1;
         }
+
+        // Send AJAX request
+        $.ajax({
+            url: "{{ route('changeItems') }}", // Laravel route to update cart
+            method: "POST",
+            data: {
+                _token: "{{ csrf_token() }}", // CSRF token for security
+                id: cartItemId,
+                quantity: newQuantity
+            },
+            success: function(response) {
+                console.log(response);
+                Swal.fire({
+                    title: "Adicionado com sucesso!",
+                    icon: "success",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                // Atualizar o mini carrinho ou outras partes da página
+            },
+            beforeSend: function () {
+                    $('#loading').show();
+                },
+            complete: function () {
+                $('#loading').hide();
+                updateCartButton($('#add-to-cart'));
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "My bad...!",
+                });
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+
+    function  deleteGeneral(id, name, type, messege){
+        Swal.fire({
+            title: messege??`<small>Tem certeza, que deseja apagar<br/> ${type??''}:  ${name??''} ?`,
+            text: `Essa ação é irreversivel!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, tenho.'
+        })
+        .then((result) => {
+            console.log(result)
+            // if (result.isConfirmed) {
+            if(result.value){
+                console.log('deleted');
+                $(`form#${id}`).submit();s
+            }
+        });
+    }
+// });
+
     </script>
 @endsection

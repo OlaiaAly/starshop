@@ -158,30 +158,21 @@ class CartController extends Controller
         
         $cart = Cart::firstOrCreate(['user_id' => $request->user()->id]);
         $cart->load('items');
-        $cart->total = $cart->items->sum(function ($item) {
-            return $item->quantity * $item->price; // Adjust based on your structure
-        });
-        $cart->save();
-    
-        return redirect()->back()->with('success', 'Venda realizada com sucesso!');
-        
-
-        //OLD
-        // $cartItem = $cart->items->find($carItemId);
-        $cartItem = $cart->items->find(1);
+        $cartItem = $cart->items->find($request->id);
 
         if (!$cartItem) {
             // Handle the case where the cart item is not found
             return response()->json(['error' => 'Cart item not found.'], 404);
         }
-        $cartItem->quantity = 5;
-        // $cartItem->options = json_encode($options); // Re-encode the options
-        $cartItem->options = json_encode(
-            [
-                "AGUA" => "VUMABA",
-                "MONTE" => "CHANDE",
-                "TERRA" => "Mar"
-            ]); // Re-encode the options
+
+        $cartItem->quantity = $request->quantity;
+        // // $cartItem->options = json_encode($options); // Re-encode the options
+        // $cartItem->options = json_encode(
+        //     [
+        //         "AGUA" => "VUMABA",
+        //         "MONTE" => "CHANDE",
+        //         "TERRA" => "Mar"
+        //     ]); // Re-encode the options
         $cartItem->save();
         return response()->json(['success' => 'Registo alterado com sucesso!'], 200);
     }
