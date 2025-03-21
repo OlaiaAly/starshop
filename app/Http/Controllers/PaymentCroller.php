@@ -46,26 +46,7 @@ class PaymentCroller extends Controller
     }
 
 
-    public function applyCoupon(Request $request)
-    {
-        $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
-        $couponCode = $request->input('coupon_code');
-
-        if (!$couponCode) {
-            return back()->with('error', 'Nenhum código de cupom fornecido.');
-        }
-
-        $coupon = Coupon::where('code', $couponCode)->first();
-
-        if (!$coupon || !$coupon->isValid()) {
-            return back()->with('error', 'Cupom inválido ou expirado.');
-        }
-
-        $cart->coupon()->associate($coupon);
-        $cart->save();
-        
-        return back()->with('success', 'Cupom aplicado com sucesso.');
-    }
+   
 
     
     
