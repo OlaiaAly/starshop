@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\PaymentMethod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,9 +18,8 @@ return new class extends Migration
             $table->string('account_number', 15)->nullable();
             $table->double('sum', 10, 2, true);
             $table->timestamps();
-            $table->foreignId('method_id')->constrained('payment_methods');
+            $table->enum('method', array_column(PaymentMethod::cases(), 'value'))->default(PaymentMethod::M_PESA->value);            
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Define a relação
-            $table->foreignId('user_id')->constrained('users');
         });
     }
 

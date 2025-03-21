@@ -28,8 +28,6 @@ class PaymentCroller extends Controller
      public function create(Request $request): bool{
         $user = $request->user();
 
-        dd($request->all());
-
         if(!$this->validatePaymentMethod($request)){
             return false;
         }
@@ -47,13 +45,12 @@ class PaymentCroller extends Controller
         }
 
         if($response->output_ResponseCode == "INS-0"){
-            $user->payment()->create([
-                'sum' => $request->amount,
-                'reference' =>  $response->output_ThirdPartyReference,
-                'method_id' => $request->method_id,
-                'account_number' => $request->account_number,
+            $user->payments()->create([
+                'sum' => $parameters['amount'],
+                'reference' => $response->output_ThirdPartyReference,
+                'method' => PaymentMethod::M_PESA,
+                'account_number' => $parameters['telephone'],
             ]);
-
             return true;
         }
 
@@ -62,12 +59,13 @@ class PaymentCroller extends Controller
 
 
     public function pay(Request $request){
-        if($this->create($request)){
-            return redirect()->route('home')->with('success', 'Pagamento efectuado com sucesso.');
+
+        if(!$this->create($request)){
+            return redirect()->back()->with('error', 'Erro ao efectuar o pagamento.');
         }
-        
-        return redirect()->back()->with('error', 'Erro ao efectuar o pagamento.');
-    
+
+
+        return view('frontend.product.shop-invoice')->with('success', 'Pagamento efetuado com sucesso.');
     }
 
 
