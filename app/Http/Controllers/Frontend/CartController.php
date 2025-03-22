@@ -165,18 +165,29 @@ class CartController extends Controller
             return response()->json(['error' => 'Cart item not found.'], 404);
         }
 
-        $cartItem->quantity = $request->quantity;
+        $quantity = $request->quantity??1;
+        $price = $cartItem->itemable->getPrice();
+        $subtotal = $price * $quantity;
+        $cartItem->quantity = $quantity;
+        $cartItem->subtotal = $subtotal;
+        $cartItem->save();
+
+
+        if( $this->updateTotalPrice($cart)){
+            return response()->json(['success' => 'Registo alterado com sucesso!'], 200);
+        }
+        
+        // return redirect()->name('');
         // // $cartItem->options = json_encode($options); // Re-encode the options
         // $cartItem->options = json_encode(
-        //     [
+            //     [
         //         "AGUA" => "VUMABA",
         //         "MONTE" => "CHANDE",
-        //         "TERRA" => "Mar"
+        //         "TERRA" => "Mar" yx;oljGGGikkkkkkdfsdsf374',.tZX BNNM,.6+ XZEQWE6OPI`DSDSDSDD*+7
         //     ]); // Re-encode the options
-        $cartItem->save();
-        return response()->json(['success' => 'Registo alterado com sucesso!'], 200);
+        return response()->json(['error' => ' Falha ao actualizar o item'], 500);
     }
-
+    
     public function deleteItem ($id){
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);

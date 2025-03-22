@@ -628,6 +628,7 @@
                     timer: 1500
                 });
                 $('#cart-message').html('<div class="alert alert-success">' + response.success + '</div>');
+                updateCartButton($('#add-to-cart'));
                 // Atualizar o mini carrinho ou outras partes da página
             },
             beforeSend: function () {
@@ -635,7 +636,6 @@
                 },
             complete: function () {
                 $('#loading').hide();
-                updateCartButton($('#add-to-cart'));
             },
             error: function(xhr, status, error) {
                 Swal.fire({
