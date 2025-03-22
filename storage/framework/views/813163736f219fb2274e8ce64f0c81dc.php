@@ -178,57 +178,68 @@
     </main>
     <script>
 
-// $(document).ready(function () {
+$(document).ready(function () {
+    let timeout = null; // Variável para armazenar o temporizador
+
     $('.update-quantity').on('click', function () {
+        let $this = $(this); // Captura o botão clicado
+        let cartItemId = $this.data('id'); // ID do item do carrinho
 
-        setTimeout(function() {
-            console.log('This message appears after 3 seconds!');
-        }, 3000);
-        let cartItemId = $(this).data('id');  // Get cart item ID
-        let newQuantity = $(this).val();  // Get new quantity
+        // Cancela qualquer timeout anterior
+        clearTimeout(timeout);
 
-        // Ensure the quantity is at least 1
-        if (newQuantity < 1) {
-            $(this).val(1);
-            newQuantity = 1;
-        }
+        // Define um novo timeout para aguardar 3 segundos antes de executar
+        timeout = setTimeout(function() {
+            let newQuantity = $this.val(); // Obtém o valor atualizado após o tempo de espera
 
-        // Send AJAX request
-        $.ajax({
-            url: "<?php echo e(route('changeItems')); ?>", // Laravel route to update cart
-            method: "POST",
-            data: {
-                _token: "<?php echo e(csrf_token()); ?>", // CSRF token for security
-                id: cartItemId,
-                quantity: newQuantity
-            },
-            success: function(response) {
-                console.log(response);
-                Swal.fire({
+            // Garante que a quantidade mínima seja 1
+            if (newQuantity < 1) {
+                $this.val(1);
+                newQuantity = 1;
+            }
+
+            $.ajax({
+                url: "<?php echo e(route('changeItems')); ?>", // Laravel route para atualizar o carrinho
+                method: "POST",
+                data: {
+                    _token: "<?php echo e(csrf_token()); ?>", // CSRF token para segurança
+                    id: cartItemId,
+                    quantity: newQuantity
+                },
+                success: function(response) {
+                    console.log(response);
+                    Swal.fire({
                     title: "Adicionado com sucesso!",
                     icon: "success",
                     showConfirmButton: false,
                     timer: 1500
-                });
-                // Atualizar o mini carrinho ou outras partes da página
-            },
-            beforeSend: function () {
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.timer) {
+                            location.reload(); // Reload only after the alert disappears
+                        }
+                    });
+
+                    // Atualizar mini carrinho ou outras partes da página
+                },
+                beforeSend: function () {
                     $('#loading').show();
                 },
-            complete: function () {
-                $('#loading').hide();
-                updateCartButton($('#add-to-cart'));
-            },
-            error: function(xhr, status, error) {
-                Swal.fire({
+                complete: function () {
+                    $('#loading').hide();
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire({
                         icon: "error",
                         title: "Oops...",
                         text: "My bad...!",
-                });
-                console.error(xhr.responseText);
-            }
-        });
+                    });
+                    console.error(xhr.responseText);
+                }
+            });
+        }, 2000); // Aguarda 3 segundos antes de executar a requisição AJAX
     });
+});
+
 
 
     function  deleteGeneral(id, name, type, messege){

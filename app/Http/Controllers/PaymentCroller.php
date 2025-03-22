@@ -71,21 +71,24 @@ class PaymentCroller extends Controller
         $parameters = $request->all();
         $parameters['amount'] = $total;
 
+        $paymentId = $this->create($parameters); // Store the payment ID after calling create()
 
-        if(!$this->create($parameters)){
+
+        if( !$paymentId ){
             return redirect()->back()->with('error', 'Erro ao efectuar o pagamento.');
         }
         
-        $cart->items->each(function ($item) {
-            $item->product->decrement('product_qty', $item->quantity);
-        });
+        //REDDUZIR O STOCK
+        // $cart->items->each(function ($item) {
+        //     $item->product->decrement('product_qty', $item->quantity);
+        // });
 
         $order = Order::create([
             'user_id' => $user->id,
             'total_price' => $total,
             'coupon_code' => $couponCode,
             'discount_amount' => $discount,
-            'payment_method' => $request->input('method'),
+            'payment_id' => $paymentId,
             'status' => 'pending',
         ]);
 
@@ -118,7 +121,7 @@ class PaymentCroller extends Controller
                 'account_number' => $parameters['telephone'],
                 'name' => $parameters['name'],
                 'email' => $parameters['email'],
-                'aaddress' => $parameters['address'],
+                'address' => $parameters['address'],
             ]);
             return true;
         }
