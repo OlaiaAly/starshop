@@ -17,7 +17,6 @@ class PaymentCroller extends Controller
     public function index()
     {
 
-
         $methods = PaymentMethod::labels();
 
 
@@ -47,7 +46,7 @@ class PaymentCroller extends Controller
 
         $finalPrice = max(0, $total - $discount); // Garante que o valor final não seja negativo
 
-        return view('frontend.product.checkout', compact('cart', 'methods'));
+        return view('frontend.product.shop-checkout', compact('cart', 'methods'));
     }
 
 
@@ -90,6 +89,7 @@ class PaymentCroller extends Controller
             'discount_amount' => $discount,
             'payment_id' => $paymentId,
             'status' => 'pending',
+            'order_number' => 'ORD-'.uniqid(),
         ]);
 
        $cart->emptyCart();

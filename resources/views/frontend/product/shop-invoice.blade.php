@@ -13,8 +13,10 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <div class="invoice-numb">
-                                            <h4 class="invoice-header-1 mb-10 mt-20">Invoice No: <span class="text-brand">#1970191</span></h4>
-                                            <h6 class="">Date: 30 Nov 2022</h6>
+                                            <h4 class="invoice-header-1 mb-10 mt-20">Oreder No: <span class="text-brand">#{{$order->order_number}}</span></h4>
+                                            <h6 class="">
+                                                Date: {{$order->created_at->format('d M Y')}}
+                                            </h6>
                                         </div>
                                     </div>
                                     <div class="col-sm-6">

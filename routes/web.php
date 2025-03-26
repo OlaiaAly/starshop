@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\TicketController;
 use App\Http\Controllers\Backend\BannerController;
 use App\Http\Controllers\Frontend\IndexController;
 use App\Http\Controllers\Frontend\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentCroller;
 use App\Http\Middleware\RedirectIfAuthenticated;
 
@@ -321,4 +322,11 @@ Route::controller(CartController::class)->middleware('auth')->group(function () 
 Route::controller(PaymentCroller::class)->middleware('auth')->group(function () {
     Route::get('/checkout', 'index')->name('checkout');
     Route::post('/pay', 'pay')->name('pay');
+});
+
+
+Route::controller(OrderController::class)->middleware('auth')->group(function () {
+    Route::get('/orders', 'index')->name('get.orders');
+    Route::get('/orders/pdf/{id}', 'openOrderPDF')->name('oders.pdf');
+    // Route::post('/pay', 'pay')->name('pay');
 });

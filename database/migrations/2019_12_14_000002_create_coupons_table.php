@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique(); // Código do cupom
-            $table->decimal('discount', 10, 2); // Valor ou percentual de desconto
-            $table->enum('type', ['fixed', 'percentage'])->default('fixed'); // Tipo do desconto
+            $table->decimal('discount', 10, 2); // Valor ou percentual de desconto (%)
+            // $table->enum('type', ['fixed', 'percentage'])->default('percentage'); // Tipo do desconto
             $table->foreignId('promoter_id')->nullable()->constrained('promoters')->onDelete('set null'); // Promotor responsável
             $table->integer('usage_limit')->nullable(); // Limite de uso
             $table->integer('times_used')->default(0); // Número de vezes utilizado

@@ -11,12 +11,42 @@ use Illuminate\Http\Request;
 use App\Models\Coupon;
 use App\Models\Order;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+
 
 class OrderController extends Controller
 {
     
     
     
+    public function index()
+    {
+        
+        $orders = auth()->user()->orders;
+        return view('frontend\home\orders\orders-list', compact('orders'));
+    }
+    
+    public function openOrderPDF($id)
+    {   
+        $user = auth()->user();
+        $order = Order::where('id', $id)
+        ->where('user_id', $user->id)
+        ->firstOrFail();
+
+        // return view ('frontend.orders.shop-invoice-doc', compact('order'));
+        // $pdf = PDF::loadView('frontend.product.shop-invoice', compact('order'))
+
+        $pdf = Pdf::loadView('frontend.orders.shop-invoice-doc', compact('order'))->setPaper('a4', 'landscape')->setOptions([
+            'isHtml5ParserEnabled' => true,
+            'isRemoteEnabled' => true
+        ]);
+        
+
+
+        return $pdf->stream('order-'.$order->order_number.'.pdf');
+
+        // return $pdf->download('order-'.$order->order_number.'.pdf');
+    }
     
     static public function store(Request $request)
     {
@@ -30,11 +60,6 @@ class OrderController extends Controller
         if(!CartController::updateTotalPrice($cart)){
             throw new \Exception('Erro ao atualizar o preço total do carrinho.');
         }
-
-
-        
-           
-      
 
         if ($couponCode) {
             $coupon = Coupon::where('code', $couponCode)->first();
@@ -53,6 +78,7 @@ class OrderController extends Controller
 
         $order = Order::create([
             'user_id' => Auth::id(),
+            'order_number' => 'ORD-'.uniqid(),
             'total_price' => $total,
             'coupon_code' => $couponCode,
             'discount_amount' => $discount,
@@ -65,6 +91,10 @@ class OrderController extends Controller
 
         return redirect()->route('sales.show', $order->id)->with('success', 'Venda realizada com sucesso!');
     }
+
+
+
+
 
 
     // public function store(Request $request)

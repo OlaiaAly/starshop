@@ -168,7 +168,7 @@
                                                 <a href="page-account.html"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a>
                                             </li>
                                             <li>
-                                                <a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My Voucher</a>
+                                                <a href="{{route('get.orders')}}"><i class="fi fi-rs-label mr-10"></i>Meus Pedidos</a>
                                             </li>
                                             <li>
                                                 <a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>Minha Wishlist</a>

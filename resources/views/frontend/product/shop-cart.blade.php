@@ -240,7 +240,7 @@ $(document).ready(function () {
                     console.error(xhr.responseText);
                 }
             });
-        }, 2000); // Aguarda 3 segundos antes de executar a requisição AJAX
+        }, 2000); // Aguarda 2 segundos antes de executar a requisição AJAX
     });
 });
 
