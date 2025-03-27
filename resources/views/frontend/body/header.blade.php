@@ -330,30 +330,37 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
                                 </a>
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
+                                        @php
+                                            $cart = \Binafy\LaravelCart\Models\Cart::firstOrCreate(['user_id' => auth()->user()->id]);
+                                        @endphp
+                                        @foreach($cart ->items as $item)
                                         <li>
                                             <div class="shopping-cart-img">
                                                 <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
                                             </div>
                                             <div class="shopping-cart-title">
-                                                <h4><a href="shop-product-right.html">Plain Striola Shirts</a></h4>
-                                                <h3><span>1 × </span>$800.00</h3>
+                                                <h4><a href="shop-product-right.html">{$cart->itemeble->product_name}}</a></h4>
+                                                <h3><span>{{$cart->quantity}} × </span>{{$card->price}}</h3>
                                             </div>
                                             <div class="shopping-cart-delete">
                                                 <a href="#"><i class="fi-rs-cross-small"></i></a>
                                             </div>
                                         </li>
-                                        <li>
-                                            <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-4.jpg')}}" /></a>
-                                            </div>
-                                            <div class="shopping-cart-title">
-                                                <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
-                                                <h3><span>1 × </span>$3500.00</h3>
-                                            </div>
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
-                                        </li>
+                                        @endforeach
+                                        {{--
+                                            <li>
+                                                <div class="shopping-cart-img">
+                                                    <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-4.jpg')}}" /></a>
+                                                </div>
+                                                <div class="shopping-cart-title">
+                                                    <h4><a href="shop-product-right.html">Macbook Pro 2022</a></h4>
+                                                    <h3><span>1 × </span>$3500.00</h3>
+                                                </div>
+                                                <div class="shopping-cart-delete">
+                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
+                                                </div>
+                                            </li> 
+                                        --}}
                                     </ul>
                                     <div class="shopping-cart-footer">
                                         <div class="shopping-cart-total">

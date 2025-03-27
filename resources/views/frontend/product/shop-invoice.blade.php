@@ -23,7 +23,7 @@
                                         <div class="invoice-name text-end">
                                             <div class="logo">
                                                 <a href="index.html"><img src="assets/imgs/theme/logo.svg" alt="logo" /></a>
-                                                <p class="text-sm text-mutted">205 North Michigan Avenue, Suite 810 <br> Chicago, 60601, USA</p>
+                                                <p class="text-sm text-mutted">Localização da empresa <br> Moçambique</p>
                                             </div>
                                         </div>
                                     </div>
@@ -33,16 +33,16 @@
                                 <div class="row">
                                     <div class="col-lg-9 col-md-6">
                                         <div class="invoice-number">
-                                            <h4 class="invoice-title-1 mb-10">Invoice To</h4>
+                                            <h4 class="invoice-title-1 mb-10">Facturado para</h4>
                                             <p class="invoice-addr-1">
-                                                <strong>AliThemes Pty Ltd</strong> <br />
-                                                contactalithemes.com <br />
-                                                PO Box 16122, Collins Street West, <br />Australia
-                                            </p>
+                                                <strong>{{$order->payment->name}}</strong> <br />
+                                                {{$order->payment->email}} <br />
+                                                {{$order->payment->address}}, <br /> Moçambique                                           </p>
                                         </div>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
                                         <div class="invoice-number">
+                                            <!-- Vendor details -->
                                             <h4 class="invoice-title-1 mb-10">Bill To</h4>
                                             <p class="invoice-addr-1">
                                                 <strong>NestMart Inc</strong> <br />
@@ -54,12 +54,12 @@
                                 </div>
                                 <div class="row mt-2">
                                     <div class="col-lg-9 col-md-6">
-                                        <h4 class="invoice-title-1 mb-10">Due Date:</h4>
-                                        <p class="invoice-from-1">30 November 2022</p>
+                                        <h4 class="invoice-title-1 mb-10">Prazo:</h4>
+                                        <p class="invoice-from-1">{{$order->expires_at??''}}</p>
                                     </div>
                                     <div class="col-lg-3 col-md-6">
                                         <h4 class="invoice-title-1 mb-10">Payment Method</h4>
-                                        <p class="invoice-from-1">Via Paypal</p>
+                                        <p class="invoice-from-1">{{ucwords( $order->payment->method->value )}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -75,18 +75,27 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @foreach($order->items as $item)
                                             <tr>
                                                 <td>
                                                     <div class="item-desc-1">
-                                                        <span>Field Roast Chao Cheese Creamy Original</span>
-                                                        <small>SKU: FWM15VKT</small>
+                                                        <span>{{$item->product->product_name}}</span>
+                                                        @php
+                                                            $options = json_decode($item->options, true);
+                                                        @endphp
+                                                        @if($options)
+                                                            @foreach ($options as $key => $value) 
+                                                                <small> {{$key}}: {{$value}} </small>
+                                                            @endforeach
+                                                        @endif
                                                     </div>
                                                 </td>
-                                                <td class="text-center">$10.99</td>
-                                                <td class="text-center">1</td>
-                                                <td class="text-right">$10.99</td>
+                                                <td class="text-center">{{$item->price}}</td>
+                                                <td class="text-center">{{$item->quantity}}</td>
+                                                <td class="text-right">{{$item->subtotal}}</td>
                                             </tr>
-                                            <tr>
+                                            @endforeach
+                                            <!-- <tr>
                                                 <td>
                                                     <div class="item-desc-1">
                                                         <span>Blue Diamond Almonds Lightly Salted</span>
@@ -118,10 +127,16 @@
                                                 <td class="text-center">$240.00</td>
                                                 <td class="text-center">1</td>
                                                 <td class="text-right">$240.00</td>
-                                            </tr>
+                                            </tr> -->
+
+
+
+
+
+                                            <!-- ORHERS -->
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">SubTotal</td>
-                                                <td class="text-right">$1710.99</td>
+                                                <td class="text-right">{{$order->total_price}}</td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">Tax</td>
@@ -129,7 +144,7 @@
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">Grand Total</td>
-                                                <td class="text-right f-w-600">$1795.99</td>
+                                                <td class="text-right f-w-600">{{$order->total_price}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -167,11 +182,17 @@
                         </div>
                         <div class="invoice-btn-section clearfix d-print-none">
                             <a href="javascript:window.print()" class="btn btn-lg btn-custom btn-print hover-up"> <img src="assets/imgs/theme/icons/icon-print.svg" alt="" /> Print </a>
-                            <a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up"> <img src="assets/imgs/theme/icons/icon-download.svg" alt="" /> Download </a>
+                            <!-- <a id="invoice_download_btn" class="btn btn-lg btn-custom btn-download hover-up"> <img src="assets/imgs/theme/icons/icon-download.svg" alt="" /> Download </a> -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+
+    <!-- INVOICE -->
+    <script src="assets/js/invoice/jspdf.min.js"></script>
+    <script src="assets/js/invoice/invoice.js"></script>
+    <!-- ENF OF INVOICE -->
     @endsection

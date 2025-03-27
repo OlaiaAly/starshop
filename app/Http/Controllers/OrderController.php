@@ -23,7 +23,7 @@ class OrderController extends Controller
     {
         
         $orders = auth()->user()->orders;
-        return view('frontend\home\orders\orders-list', compact('orders'));
+        return view('frontend\orders\orders-list', compact('orders'));
     }
     
     public function openOrderPDF($id)
@@ -33,17 +33,17 @@ class OrderController extends Controller
         ->where('user_id', $user->id)
         ->firstOrFail();
 
-        // return view ('frontend.orders.shop-invoice-doc', compact('order'));
         // $pdf = PDF::loadView('frontend.product.shop-invoice', compact('order'))
-
-        $pdf = Pdf::loadView('frontend.orders.shop-invoice-doc', compact('order'))->setPaper('a4', 'landscape')->setOptions([
-            'isHtml5ParserEnabled' => true,
-            'isRemoteEnabled' => true
-        ]);
         
+        // $pdf = Pdf::loadView('frontend.orders.shop-invoice-doc', compact('order'))->setPaper('a4', 'landscape')->setOptions([
+        //     'isHtml5ParserEnabled' => true,
+        //     'isRemoteEnabled' => true
+        // ]);
+        // 
+        return view ('frontend.product.shop-invoice', compact('order'));
 
 
-        return $pdf->stream('order-'.$order->order_number.'.pdf');
+        // return $pdf->stream('order-'.$order->order_number.'.pdf');
 
         // return $pdf->download('order-'.$order->order_number.'.pdf');
     }

@@ -134,7 +134,7 @@ class CartController extends Controller
                 $quantity = $cartItem->quantity;
                 
                 echo "Product: " . $itemable->product_name . ", Quantity: " . $quantity . "<br>";
-
+                
                 // Decode the JSON options
                 $options = json_decode($cartItem->options, true);
                 

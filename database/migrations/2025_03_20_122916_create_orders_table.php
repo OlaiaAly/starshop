@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Cliente
             $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade'); // When nulo pendente
             $table->enum('status', ['pending', 'paid', 'canceled'])->default('pending'); // Status da venda
+            $table->timestamp('expire_at');
             $table->timestamps(); // created_at & updated_at
         });
     }
