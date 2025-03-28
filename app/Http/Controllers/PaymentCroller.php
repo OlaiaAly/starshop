@@ -101,6 +101,13 @@ class PaymentCroller extends Controller
         }
 
        $cart->emptyCart();
+       $cart->update([
+        'coupon_id' => null,
+        'total_discount' => 0,
+        'total' => 0,
+    ]);
+
+    $cart->save();
 
        return view('frontend.product.shop-invoice', compact('order'))->with('success', 'Pagamento efetuado com sucesso.');
     }
