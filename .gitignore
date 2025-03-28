@@ -4,6 +4,8 @@
 /public/hot
 /public/storage
 /storage
+/storage/logs/
+
 storage/framework/sessions/*
 /storage/*.key
 /vendor
