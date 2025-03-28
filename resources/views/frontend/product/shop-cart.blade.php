@@ -138,25 +138,27 @@
                                             <div class="divider-2 mt-10 mb-10"></div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td class="cart_total_label">
-                                            <h6 class="text-muted">Descontos</h6>
-                                        </td>
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-heading text-end">
-                                                {{ $cart->coupon->type == 'percentage' ? $cart->coupon->discount.' %' : $cart->coupon->discount.' MZN' }}
-                                            </h5>
-                                            </h4</td> </tr> 
-                                            <!-- <tr> -->
-                                        <!-- <td class="cart_total_label">
-                                            <h6 class="text-muted">Estimate for</h6>
-                                        </td>
-                                        <td class="cart_total_amount">
-                                            <h5 class="text-heading text-end">United Kingdom</h4</td> </tr> <tr>
-                                        <td scope="col" colspan="2"> -->
-                                            <div class="divider-2 mt-10 mb-10"></div>
-                                        </td>
-                                    </tr>
+                                    @if($cart->coupon)
+                                        <tr>
+                                            <td class="cart_total_label">
+                                                <h6 class="text-muted">Descontos</h6>
+                                            </td>
+                                            <td class="cart_total_amount">
+                                                <h5 class="text-heading text-end">
+                                                    {{ $cart->coupon->type == 'percentage' ? $cart->coupon->discount.' %' : $cart->coupon->discount.' MZN' }}
+                                                </h5>
+                                                </h4</td> </tr> 
+                                                <!-- <tr> -->
+                                            <!-- <td class="cart_total_label">
+                                                <h6 class="text-muted">Estimate for</h6>
+                                            </td>
+                                            <td class="cart_total_amount">
+                                                <h5 class="text-heading text-end">United Kingdom</h4</td> </tr> <tr>
+                                            <td scope="col" colspan="2"> -->
+                                                <div class="divider-2 mt-10 mb-10"></div>
+                                            </td>
+                                        </tr>
+                                    @endif
                                     <tr>
                                         <td class="cart_total_label">
                                             <h6 class="text-muted">Total</h6>
