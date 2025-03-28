@@ -33,6 +33,10 @@ class OrderController extends Controller
         ->where('user_id', $user->id)
         ->firstOrFail();
 
+        $order->load('items');
+
+        dd($order->items);
+
         // $pdf = PDF::loadView('frontend.product.shop-invoice', compact('order'))
         
         // $pdf = Pdf::loadView('frontend.orders.shop-invoice-doc', compact('order'))->setPaper('a4', 'landscape')->setOptions([
@@ -86,7 +90,16 @@ class OrderController extends Controller
             'status' => 'pending',
         ]);
 
-        // Limpar o carrinho
+
+        foreach ($cart->items as $item) {
+            $order->items()->create([
+                'product_id' => $item->itemable->id,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+                'subtotal' => $item->subtotal,
+                'options' => $item->options??null,
+            ]);
+        }
         // $cart->emptyCart();
 
         return redirect()->route('sales.show', $order->id)->with('success', 'Venda realizada com sucesso!');

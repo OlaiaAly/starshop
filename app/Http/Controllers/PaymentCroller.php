@@ -56,6 +56,7 @@ class PaymentCroller extends Controller
     
     public function pay(Request $request){
 
+
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         
@@ -94,7 +95,7 @@ class PaymentCroller extends Controller
 
        $cart->emptyCart();
 
-       return view('frontend.product.shop-invoice')->with('success', 'Pagamento efetuado com sucesso.');
+       return view('frontend.product.shop-invoice', compact('order'))->with('success', 'Pagamento efetuado com sucesso.');
     }
     
 
@@ -122,6 +123,8 @@ class PaymentCroller extends Controller
                 'name' => $parameters['name'],
                 'email' => $parameters['email'],
                 'address' => $parameters['address'],
+                "province" => $parameters['province'],
+                "aditional_info" => $parameters['aditional_info'],
             ]);
             return true;
         }

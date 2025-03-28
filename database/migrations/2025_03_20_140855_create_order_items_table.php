@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onDelete('cascade'); // Relaciona com o produto
             $table->integer('quantity'); // Quantidade do item comprado
             $table->decimal('price', 10, 2); // Preço unitário do item no momento da venda
+            $table->json('options')->nullable();  // For more complex options (JSON)            
             $table->decimal('subtotal', 10, 2); // Preço total do item no momento da venda
             $table->timestamps();
         });

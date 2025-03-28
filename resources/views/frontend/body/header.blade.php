@@ -331,22 +331,25 @@ $categories = App\Models\Category::orderBy('category_name', 'ASC')->limit(5)->ge
                                 <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                     <ul>
                                         @php
-                                            $cart = \Binafy\LaravelCart\Models\Cart::firstOrCreate(['user_id' => auth()->user()->id]);
+                                            $userId = auth()->user()->id??null;
+                                            $cart = $userId ? \Binafy\LaravelCart\Models\Cart::firstOrCreate(['user_id' => $userId ]) : null;
                                         @endphp
-                                        @foreach($cart ->items as $item)
-                                        <li>
-                                            <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
-                                            </div>
-                                            <div class="shopping-cart-title">
-                                                <h4><a href="shop-product-right.html">{$cart->itemeble->product_name}}</a></h4>
-                                                <h3><span>{{$cart->quantity}} × </span>{{$card->price}}</h3>
-                                            </div>
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
-                                        </li>
-                                        @endforeach
+                                        @if($cart)
+                                            @foreach($cart ->items as $item)
+                                            <li>
+                                                <div class="shopping-cart-img">
+                                                    <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
+                                                </div>
+                                                <div class="shopping-cart-title">
+                                                    <h4><a href="shop-product-right.html">{$cart->itemeble->product_name}}</a></h4>
+                                                    <h3><span>{{$cart->quantity}} × </span>{{$cart->price}}</h3>
+                                                </div>
+                                                <div class="shopping-cart-delete">
+                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
+                                                </div>
+                                            </li>
+                                            @endforeach
+                                        @endif   
                                         {{--
                                             <li>
                                                 <div class="shopping-cart-img">

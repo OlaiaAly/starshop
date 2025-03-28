@@ -13,13 +13,9 @@ class OrderItem extends Model
 
     protected $guarded = [];
 
-
-    // protected $fillable = [
-    //     'sale_id',
-    //     'product_id',
-    //     'quantity',
-    //     'price',
-    // ];
+    protected $casts = [
+        'options' => 'array',
+    ];
 
     public function sale()
     {

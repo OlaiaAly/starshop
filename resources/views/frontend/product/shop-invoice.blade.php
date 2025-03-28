@@ -82,6 +82,7 @@
                                                         <span>{{$item->product->product_name}}</span>
                                                         @php
                                                             $options = json_decode($item->options, true);
+                                                    
                                                         @endphp
                                                         @if($options)
                                                             @foreach ($options as $key => $value) 

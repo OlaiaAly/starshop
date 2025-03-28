@@ -41,14 +41,19 @@
                             <div class="row shipping_calculator">
                                 <div class="form-group col-lg-6">
                                     <div class="custom_select">
-                                        <select class="form-control select-active">
-                                            <option value="">Select an option...</option>
-                                            <option value="AX">Aland Islands</option>
-                                            <option value="AF">Afghanistan</option>
-                                            <option value="AL">Albania</option>
-                                            <option value="DZ">Algeria</option>
-                                            <option value="AD">Andorra</option>
-                                             
+                                        <select     name="province" class="form-control select-active" required>
+                                        <option value="">Província...</option>
+                                            <option value="Maputo Cidade">Maputo Cidade</option>
+                                            <option value="Maputo Província">Maputo Província</option>
+                                            <option value="Gaza">Gaza</option>
+                                            <option value="Inhambane">Inhambane</option>
+                                            <option value="Manica">Manica</option>
+                                            <option value="Sofala">Sofala</option>
+                                            <option value="Tete">Tete</option>
+                                            <option value="Zambézia">Zambézia</option>
+                                            <option value="Nampula">Nampula</option>
+                                            <option value="Cabo Delgado">Cabo Delgado</option>
+                                            <option value="Niassa">Niassa</option>
                                         </select>
                                     </div>
                                 </div>
@@ -80,7 +85,7 @@
 
 
                             <div class="row shipping_calculator">
-                                <div class="form-group col-lg-6">
+                                <!-- <div class="form-group col-lg-6">
                                     <div class="custom_select">
                                         <select class="form-control select-active">
                                             <option value="">Select an option...</option>
@@ -92,7 +97,7 @@
                                              
                                         </select>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="form-group col-lg-6">
                                     <input required="" type="text" name="address" placeholder="Address *"> 
                                 </div>
@@ -103,7 +108,7 @@
 
   
                             <div class="form-group mb-30">
-                                <textarea rows="5" placeholder="Additional information"></textarea>
+                                <textarea name="aditional_info"  rows="5" placeholder="Additional information"></textarea>
                             </div>
 
  
