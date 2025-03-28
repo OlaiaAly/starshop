@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Coupon;
 use App\Models\Product;
 use Illuminate\Http\Request;
-use \Binafy\LaravelCart\Models\Cart;
+// use \Binafy\LaravelCart\Models\Cart;
+use App\Models\Cart;
 use Binafy\LaravelCart\Models\CartItem;
 use Binafy\LaravelCart\LaravelCart;
 
@@ -100,58 +101,66 @@ class CartController extends Controller
         $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
         $couponCode = $request->coupon_code;
 
-        // dd($couponCode);
+        //VARIVAVEIS
+        $total = $cart->total;
+        $discount = 0;
 
-        if (!$couponCode) {
+
+        if($cart->coupon){
+            return back()->with('error', 'Carrinho já atrelado ao um Cupom');
+        }
+
+
+        if (!$couponCode ) {
             return back()->with('error', 'Nenhum código de cupom fornecido.');
         }
 
         $coupon = Coupon::where('code', $couponCode)->first();
-
+        
         if (!$coupon || !$coupon->isValid()) {
             return back()->with('error', 'Cupom inválido ou expirado.');
         }
-
-        $cart->coupon()->associate($coupon);
-        $cart->save();
         
-        return back()->with('success', 'Cupom aplicado com sucesso.');
+
+        if($this->processCoupon($cart, $coupon)){
+            $coupon->increment('times_used');
+            $cart->coupon()->associate($coupon);
+            return back()->with('success', 'Cupom aplicado com sucesso.');
+        }
+
+        return back()->with('error', 'Falha ao aplicar o cupom.');
     }
 
-    public function openCard(){
+    static  public function processCoupon($cart, $coupon)
+    {
+        $discount = 0;
+        $total = $cart->total;
 
-        // return redirect()->back()->with('success', 'Venda realizada com sucesso!');
+
+        if ($coupon && $coupon->isValid()) {
+            $discount = $coupon->type == 'percentage' 
+                ? ($total * ($coupon->discount / 100)) 
+                : $coupon->discount;
+
+            $cart->total_discount =  max(0, $total - $discount); // Garante que o valor final não seja negativo
+            $cart->coupon()->associate($coupon);
+            $cart->save(); 
+            return true;  
+        }
+
+        return false;
+    }
+
+
+    
+
+    public function openCard(){
 
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $cart->load('items');
         return view('frontend.product.shop-cart', compact('cart'));
-
-        if ($cart) {
-            foreach ($cartItems as $cartItem) {
-                // Access item details
-                $itemable = $cartItem->itemable; // The related model (e.g., Product)
-                $quantity = $cartItem->quantity;
-                
-                echo "Product: " . $itemable->product_name . ", Quantity: " . $quantity . "<br>";
-                
-                // Decode the JSON options
-                $options = json_decode($cartItem->options, true);
-                
-                // Display the options
-                if ($options) {
-                    echo ", Options: ";
-                    foreach ($options as $key => $value) {
-                        echo "<p>".$key . ": " . $value . ", </p>";
-                    }
-                }
-                echo "<br>";
-                
-            }
-        } else {
-            echo "Cart not found.";
-        }
-        exit;
+        
     }
 
     public function changeItems(Request $request){
@@ -174,29 +183,18 @@ class CartController extends Controller
 
 
         if( $this->updateTotalPrice($cart)){
+            if($this->processCoupon($cart, $cart->coupon)){
+                return response()->json(['success' => 'Registo alterado com sucesso!'], 200);
+            }
             return response()->json(['success' => 'Registo alterado com sucesso!'], 200);
         }
         
-        // return redirect()->name('');
-        // // $cartItem->options = json_encode($options); // Re-encode the options
-        // $cartItem->options = json_encode(
-            //     [
-        //         "AGUA" => "VUMABA",
-        //         "MONTE" => "CHANDE",
-        //         "TERRA" => "Mar" yx;oljGGGikkkkkkdfsdsf374',.tZX BNNM,.6+ XZEQWE6OPI`DSDSDSDD*+7
-        //     ]); // Re-encode the options
         return response()->json(['error' => ' Falha ao actualizar o item'], 500);
     }
     
     public function deleteItem ($id){
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
-
-        // Assuming you have the cart item ID (e.g., from a form or request)
-        // $cartItemId = $request->cart_item_id;
-        
-        //TO DELETE ALL CARD ITEMS
-       // $cart->emptyCart();
 
        //REMOVE BY PRODUCT
        //$cart->removeItem($product);

@@ -35,8 +35,8 @@ class PaymentCroller extends Controller
 
             if ($coupon && $coupon->isValid()) {
                 $discount = $coupon->type == 'percentage' 
-                    ? ($total * ($coupon->discount_amount / 100)) 
-                    : $coupon->discount_amount;
+                    ? ($total * ($coupon->discount / 100)) 
+                    : $coupon->discount;
 
                 $coupon->increment('times_used');
             } else {
@@ -56,20 +56,16 @@ class PaymentCroller extends Controller
     
     public function pay(Request $request){
 
-
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         
-        if(!CartController::updateTotalPrice($cart)){
-            throw new \Exception('Erro ao atualizar o preço total do carrinho.');
+        if(!CartController::updateTotalPrice($cart) && !CartController::processCoupon($cart, $cart->coupon)){
+            return redirect()->back()->with('error', 'Erro ao actualizar o custo da vendas.');
         }
-
-        $total = $cart->total;
-        $discount = 0;
-        $couponCode = $cart->coupon->code??null;
-
+      
+    
         $parameters = $request->all();
-        $parameters['amount'] = $total;
+        $parameters['amount'] = $cart->total_discount?? $cart->total;
 
         $paymentId = $this->create($parameters); // Store the payment ID after calling create()
 
@@ -85,13 +81,24 @@ class PaymentCroller extends Controller
 
         $order = Order::create([
             'user_id' => $user->id,
-            'total_price' => $total,
-            'coupon_code' => $couponCode,
-            'discount_amount' => $discount,
+            'total_price' => $cart->total,
+            'coupon_code' => $cart->coupon->code??null,
+            'discount_amount' => $cart->total_discount,
             'payment_id' => $paymentId,
             'status' => 'pending',
             'order_number' => 'ORD-'.uniqid(),
         ]);
+
+        //TRANSFERINDO OS ITEMS DO CARRINHO PARA PEDIDO
+        foreach ($cart->items as $item) {
+            $order->items()->create([
+                'product_id' => $item->itemable->id,
+                'quantity' => $item->quantity,
+                'price' => $item->price,
+                'subtotal' => $item->subtotal,
+                'options' => $item->options??null,
+            ]);
+        }
 
        $cart->emptyCart();
 

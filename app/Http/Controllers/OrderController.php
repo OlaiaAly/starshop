@@ -34,8 +34,10 @@ class OrderController extends Controller
         ->firstOrFail();
 
         $order->load('items');
+        
+        
+        return view ('frontend.product.shop-invoice', compact('order'));
 
-        dd($order->items);
 
         // $pdf = PDF::loadView('frontend.product.shop-invoice', compact('order'))
         
@@ -44,7 +46,6 @@ class OrderController extends Controller
         //     'isRemoteEnabled' => true
         // ]);
         // 
-        return view ('frontend.product.shop-invoice', compact('order'));
 
 
         // return $pdf->stream('order-'.$order->order_number.'.pdf');
@@ -52,58 +53,58 @@ class OrderController extends Controller
         // return $pdf->download('order-'.$order->order_number.'.pdf');
     }
     
-    static public function store(Request $request)
-    {
-        $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
+    // static public function store(Request $request)
+    // {
+    //     $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
 
-        // $cart->items->each(function ($item) {
-        //     $item->product->decrement('product_qty', $item->quantity);
-        // });
-
-
-        if(!CartController::updateTotalPrice($cart)){
-            throw new \Exception('Erro ao atualizar o preço total do carrinho.');
-        }
-
-        if ($couponCode) {
-            $coupon = Coupon::where('code', $couponCode)->first();
-
-            if ($coupon && $coupon->isValid()) {
-                $discount = $coupon->type == 'percentage' 
-                    ? ($total * ($coupon->discount_amount / 100)) 
-                    : $coupon->discount_amount;
-
-                $coupon->increment('times_used');
-            } else {
-                return back()->with('error', 'Cupom inválido ou expirado.');
-            }
-        }
+    //     // $cart->items->each(function ($item) {
+    //     //     $item->product->decrement('product_qty', $item->quantity);
+    //     // });
 
 
-        $order = Order::create([
-            'user_id' => Auth::id(),
-            'order_number' => 'ORD-'.uniqid(),
-            'total_price' => $total,
-            'coupon_code' => $couponCode,
-            'discount_amount' => $discount,
-            'payment_id' => $paymentId,
-            'status' => 'pending',
-        ]);
+    //     if(!CartController::updateTotalPrice($cart)){
+    //         throw new \Exception('Erro ao atualizar o preço total do carrinho.');
+    //     }
+
+    //     if ($couponCode) {
+    //         $coupon = Coupon::where('code', $couponCode)->first();
+
+    //         if ($coupon && $coupon->isValid()) {
+    //             $discount = $coupon->type == 'percentage' 
+    //                 ? ($total * ($coupon->discount_amount / 100)) 
+    //                 : $coupon->discount_amount;
+
+    //             $coupon->increment('times_used');
+    //         } else {
+    //             return back()->with('error', 'Cupom inválido ou expirado.');
+    //         }
+    //     }
 
 
-        foreach ($cart->items as $item) {
-            $order->items()->create([
-                'product_id' => $item->itemable->id,
-                'quantity' => $item->quantity,
-                'price' => $item->price,
-                'subtotal' => $item->subtotal,
-                'options' => $item->options??null,
-            ]);
-        }
-        // $cart->emptyCart();
+    //     $order = Order::create([
+    //         'user_id' => Auth::id(),
+    //         'order_number' => 'ORD-'.uniqid(),
+    //         'total_price' => $total,
+    //         'coupon_code' => $couponCode,
+    //         'discount_amount' => $discount,
+    //         'payment_id' => $paymentId,
+    //         'status' => 'pending',
+    //     ]);
 
-        return redirect()->route('sales.show', $order->id)->with('success', 'Venda realizada com sucesso!');
-    }
+
+    //     foreach ($cart->items as $item) {
+    //         $order->items()->create([
+    //             'product_id' => $item->itemable->id,
+    //             'quantity' => $item->quantity,
+    //             'price' => $item->price,
+    //             'subtotal' => $item->subtotal,
+    //             'options' => $item->options??null,
+    //         ]);
+    //     }
+    //     // $cart->emptyCart();
+
+    //     return redirect()->route('sales.show', $order->id)->with('success', 'Venda realizada com sucesso!');
+    // }
 
 
 

@@ -15,6 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         Artisan::call('migrate:fresh');
 
+
+        \App\Models\Promoter::factory(30)->create();
+        \App\Models\Coupon::factory(30)->create();
+
+
         $this->call(UserTableSeeder::class);
         // \App\Models\User::factory(10)->create();
         $this->call(CategorySeeder::class);

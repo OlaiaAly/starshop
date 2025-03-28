@@ -137,14 +137,24 @@
                             
                             <!-- <strong>Color : </strong> -->
                             <!-- <strong>Size : </strong> -->
-                            
+
+                            @php
+                                $options = json_decode($item->options, true);
+                            @endphp
+                            @if($options)
+                                @foreach ($options as $key => $value) 
+                                    <small> {{ucwords($key)}}</small>: {{$value}}</br>
+                                @endforeach
+                            @endif
                         </div>
                     </td>
                     <td>
                         <h6 class="text-muted pl-20 pr-20">x {{$item->quantity}}</h6>
                     </td>
                     <td>
-                        <h4 class="text-brand">{{$item->subtotal}}</h4>
+                        <h4 class="text-brand">
+                            {{ number_format($item->subtotal, 2, '.', ' ') . ' MZN' }}
+                        </h4>
                     </td>
                 </tr>
                 @endforeach
@@ -185,7 +195,7 @@
                 </td>
                 <td class="cart_total_amount">
                     <h4 class="text-brand text-end">
-                        {{ number_format($cart->total_discount??0, 2, '.', ' ') . ' MZN' }}
+                        {{ $cart->coupon->type == 'percentage' ? $cart->coupon->discount.' %' : $cart->coupon->discount.' MZN' }}
                     </h4>
                 </td>
             </tr>
@@ -197,7 +207,7 @@
                 <td class="cart_total_amount">
                     <h4 class="text-brand text-end">       
 
-                        {{ number_format($$cart->total_discount??$cart->total, 2, '.', ' ') . ' MZN' }}
+                        {{ number_format($cart->total_discount??$cart->total, 2, '.', ' ') . ' MZN' }}
                     </h4>
                 </td>
             </tr>

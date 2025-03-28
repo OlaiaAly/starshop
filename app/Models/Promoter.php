@@ -10,10 +10,11 @@ class Promoter extends Model
     use HasFactory;
 
 
+    protected $guarded=[];
 
     public function sales()
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(Order::class);
     }
 
 
