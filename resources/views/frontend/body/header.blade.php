@@ -114,21 +114,36 @@
                                         <span class="pro-count blue">2</span>
                                     </a>
                                     <a href="{{route('openCard')}}"><span class="lable">Carrinhos</span></a>
+                                    @php
+                                        $user = auth()->user();
+                                        if ($user) {
+                                            $cart = \App\Models\Cart::firstOrCreate(['user_id' => $user->id]);
+                                            $cart->load('items');
+                                        } else {
+                                            $cart = null;
+                                        }
+                                    @endphp
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2">
                                         <ul>
-                                            <li>
-                                                <div class="shopping-cart-img">
-                                                    <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
-                                                </div>
-                                                <div class="shopping-cart-title">
-                                                    <h4><a href="shop-product-right.html">Daisy Casual Bag</a></h4>
-                                                    <h4><span>1 × </span>$800.00</h4>
-                                                </div>
-                                                <div class="shopping-cart-delete">
-                                                    <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                                </div>
-                                            </li>
-                                            <li>
+                                        @if($cart && $cart->items->count() > 0)
+                                                @foreach($cart->items as $item)
+                                                <li>
+                                                    <div class="shopping-cart-img">
+                                                        <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-3.jpg')}}" /></a>
+                                                    </div>
+                                                    <div class="shopping-cart-title">
+                                                        <h4><a href="shop-product-right.html">{{ucwords( $item->itemable->product_name)}}</a></h4>
+                                                        <h4><span>{{$item->quantity}} × </span>{{ number_format($item->subtotal, 2, '.', ' ') . ' MZN' }}
+                                                        </h4>
+                                                    </div>
+                                                    <div class="shopping-cart-delete">
+                                                        <a href="#"><i class="fi-rs-cross-small"></i></a>
+                                                    </div>
+                                                </li>
+                                                @endforeach
+                                            @endif
+
+                                            <!-- <li>
                                                 <div class="shopping-cart-img">
                                                     <a href="shop-product-right.html"><img alt="Nest" src="{{asset('frontend/assets/imgs/shop/thumbnail-2.jpg')}}" /></a>
                                                 </div>
@@ -139,15 +154,15 @@
                                                 <div class="shopping-cart-delete">
                                                     <a href="#"><i class="fi-rs-cross-small"></i></a>
                                                 </div>
-                                            </li>
+                                            </li> -->
                                         </ul>
                                         <div class="shopping-cart-footer">
                                             <div class="shopping-cart-total">
-                                                <h4>Total <span>$4000.00</span></h4>
+                                                <h4>Total <span>{{ number_format($cart->total, 2, '.', ' ') . ' MZN' }}</span></h4>
                                             </div>
                                             <div class="shopping-cart-button">
                                                 <a href="{{route('openCard')}}" class="outline">View cart</a>
-                                                <a href="shop-checkout.html">Checkout</a>
+                                                <a href="{{route('openCard')}}">Checkout</a>
                                             </div>
                                         </div>
                                     </div>
