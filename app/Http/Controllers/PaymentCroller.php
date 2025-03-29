@@ -8,6 +8,7 @@ use App\Models\Cart;
 use App\Models\Coupon;
 use App\Models\Order;
 use App\Services\MpesaService;
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Enum;
 use Validator;
@@ -17,8 +18,8 @@ class PaymentCroller extends Controller
     public function index()
     {
 
-        $methods = PaymentMethod::labels();
 
+        $methods = PaymentMethod::labels();
 
         $cart = Cart::firstOrCreate(['user_id' => auth()->user()->id]);
 
@@ -55,6 +56,7 @@ class PaymentCroller extends Controller
     
     
     public function pay(Request $request){
+
 
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
@@ -100,16 +102,13 @@ class PaymentCroller extends Controller
             ]);
         }
 
-       $cart->emptyCart();
-       $cart->update([
-        'coupon_id' => null,
-        'total_discount' => 0,
-        'total' => 0,
-    ]);
-
-    $cart->save();
-
-       return view('frontend.product.shop-invoice', compact('order'))->with('success', 'Pagamento efetuado com sucesso.');
+        //LIMPANDO O CARRINHO	
+        $cart->emptyCart(); 
+        $cart->total = 0;
+        $cart->total_discount = null; // Garante que está passando NULL
+        $cart->coupon_id = null;
+        $cart->save();
+        return redirect()->route('orders.pdf', ['id' => $order->id])->with('success', 'Pagamento efetuado com sucesso.');
     }
     
 
@@ -139,6 +138,7 @@ class PaymentCroller extends Controller
                 'address' => $parameters['address'],
                 "province" => $parameters['province'],
                 "aditional_info" => $parameters['aditional_info'],
+                'phone' => $parameters['phone']
             ]);
             return true;
         }

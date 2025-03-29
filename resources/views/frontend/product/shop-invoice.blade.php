@@ -55,7 +55,7 @@
                                 <div class="row mt-2">
                                     <div class="col-lg-9 col-md-6">
                                         <h4 class="invoice-title-1 mb-10">Prazo:</h4>
-                                        <p class="invoice-from-1">{{$order->expires_at??''}}</p>
+                                        {{ \Carbon\Carbon::parse($order->expire_at)->format('d-m-Y') }}
                                     </div>
                                     <div class="col-lg-3 col-md-6">
                                         <h4 class="invoice-title-1 mb-10">Payment Method</h4>
@@ -86,14 +86,17 @@
                                                         @endphp
                                                         @if($options)
                                                             @foreach ($options as $key => $value) 
-                                                                <small> {{$key}}: {{$value}} </small>
+                                                                <small> {{ ucwords($key) }}: {{ ucwords($value) }} </small>
                                                             @endforeach
                                                         @endif
                                                     </div>
                                                 </td>
                                                 <td class="text-center">{{$item->price}}</td>
                                                 <td class="text-center">{{$item->quantity}}</td>
-                                                <td class="text-right">{{$item->subtotal}}</td>
+                                                <td class="text-right">
+                                                    {{ number_format($item->subtotal, 2, '.', ' ') . ' MZN' }}
+
+                                                </td>
                                             </tr>
                                             @endforeach
                                             <!-- <tr>
@@ -137,15 +140,27 @@
                                             <!-- ORHERS -->
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">SubTotal</td>
-                                                <td class="text-right">{{$order->total_price}}</td>
+                                                <td class="text-right">
+                                                    {{ number_format($order->total_price, 2, '.', ' ') . ' MZN' }}
+                                                </td>
                                             </tr>
+            
                                             <tr>
-                                                <td colspan="3" class="text-end f-w-600">Tax</td>
-                                                <td class="text-right">$85.99</td>
+                                                <td colspan="3" class="text-end f-w-600">Desconto</td>
+                                                <td class="text-right">
+                                                    @if($order->coupon_code)
+                                                        {{ number_format(100 - ($order->discount_amount / $order->total_price) * 100, 2, '.', ' ') . '%' }}
+                                                    @else
+                                                        {{ number_format(0, 2, '.', ' ') . '%' }}
+                                                    @endif
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td colspan="3" class="text-end f-w-600">Grand Total</td>
-                                                <td class="text-right f-w-600">{{$order->total_price}}</td>
+                                                <td class="text-right f-w-600">
+                                                    {{ number_format($order->discount_amount?? $order->total_price, 2, '.', ' ') . ' MZN' }}
+
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>

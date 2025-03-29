@@ -170,8 +170,8 @@
                                                     <td class="text-right">$1710.99</td>
                                                 </tr>
                                                 <tr>
-                                                    <td colspan="3" class="text-end f-w-600">Tax</td>
-                                                    <td class="text-right">$85.99</td>
+                                                    <td colspan="3" class="text-end f-w-600">Desconto</td>
+                                                    <td class="text-right">{{$order->discount_amount}}</td>
                                                 </tr>
                                                 <tr>
                                                     <td colspan="3" class="text-end f-w-600">Grand Total</td>

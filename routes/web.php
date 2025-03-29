@@ -327,6 +327,6 @@ Route::controller(PaymentCroller::class)->middleware('auth')->group(function () 
 
 Route::controller(OrderController::class)->middleware('auth')->group(function () {
     Route::get('/orders', 'index')->name('get.orders');
-    Route::get('/orders/pdf/{id}', 'openOrderPDF')->name('oders.pdf');
+    Route::get('/orders/pdf/{id}', 'openOrderPDF')->name('orders.pdf');
     // Route::post('/pay', 'pay')->name('pay');
 });

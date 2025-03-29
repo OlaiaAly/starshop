@@ -25,7 +25,7 @@ class OrderController extends Controller
         $orders = auth()->user()->orders;
         return view('frontend\orders\orders-list', compact('orders'));
     }
-    
+
     public function openOrderPDF($id)
     {   
         $user = auth()->user();

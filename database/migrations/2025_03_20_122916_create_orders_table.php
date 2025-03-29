@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('order_number')->unique(); // Número do pedido
             $table->decimal('total_price', 10, 2); // Preço total da venda
             $table->string('coupon_code')->nullable(); // Código do cupom
-            $table->decimal('discount_amount', 10, 2)->default(0); // Valor do desconto
+            $table->decimal('discount_amount', 10, 2)->nullable(); // Valor do desconto
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Cliente
             $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade'); // When nulo pendente
             $table->enum('status', ['pending', 'paid', 'canceled'])->default('pending'); // Status da venda

@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group col-lg-6">
-                                <input type="tel" pattern="8[2-7]\d{7}" id="telephone" name="telephone" 
+                                <input type="tel" pattern="8[2-7]\d{7}" id="phone" name="phone" 
                                     placeholder="Digite seu telefone" maxlength="9" required 
                                     title="8x xxx xxxx">
                                 </div>
@@ -163,64 +163,62 @@
         </table>
         
         
-        
-        
- <table class="table no-border">
-     <tbody>
-         <tr>
-             <td class="cart_total_label">
-                 <h6 class="text-muted">Subtotal</h6>
-                </td>
-                <td class="cart_total_amount">
-                    <h4 class="text-brand text-end">
-                    {{ number_format($cart->items->sum('subtotal'), 2, '.', ' ') . ' MZN' }}
-                    </h4>
-                </td>
-            </tr>
-            
-            <tr>
-                <td class="cart_total_label">
-                    <h6 class="text-muted">Coupn Name</h6>
-                </td>
-                <td class="cart_total_amount">
-                    <h6 class="text-brand text-end">
-                        {{$cart->coupon->code??"Sem coupon"}}
-                    </h6>
-                </td>
-            </tr>
+                
+                
+        <table class="table no-border">
+            <tbody>
+                <tr>
+                    <td class="cart_total_label">
+                        <h6 class="text-muted">Subtotal</h6>
+                        </td>
+                        <td class="cart_total_amount">
+                            <h4 class="text-brand text-end">
+                            {{ number_format($cart->items->sum('subtotal'), 2, '.', ' ') . ' MZN' }}
+                            </h4>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td class="cart_total_label">
+                            <h6 class="text-muted">Coupn Name</h6>
+                        </td>
+                        <td class="cart_total_amount">
+                            <h6 class="text-brand text-end">
+                                {{$cart->coupon->code??"Sem coupon"}}
+                            </h6>
+                        </td>
+                    </tr>
 
-            <tr>
-                <td class="cart_total_label">
-                    <h6 class="text-muted">Coupon Discount</h6>
-                </td>
-                <td class="cart_total_amount">
-                    <h4 class="text-brand text-end">
-                        {{ $cart->coupon->type == 'percentage' ? $cart->coupon->discount.' %' : $cart->coupon->discount.' MZN' }}
-                    </h4>
-                </td>
-            </tr>
+                    @if($cart->coupon)
+                    <tr>
+                        <td class="cart_total_label">
+                            <h6 class="text-muted">Coupon Discount</h6>
+                        </td>
+                        <td class="cart_total_amount">
+                            <h4 class="text-brand text-end">
+                                {{ $cart->coupon->type == 'percentage' ? $cart->coupon->discount.' %' : $cart->coupon->discount.' MZN' }}
+                            </h4>
+                        </td>
+                    </tr>
+                    @endif
 
-            <tr>
-                <td class="cart_total_label">
-                    <h6 class="text-muted">Grand Total</h6>
-                </td>
-                <td class="cart_total_amount">
-                    <h4 class="text-brand text-end">       
+                    <tr>
+                        <td class="cart_total_label">
+                            <h6 class="text-muted">Grand Total</h6>
+                        </td>
+                        <td class="cart_total_amount">
+                            <h4 class="text-brand text-end">       
 
-                        {{ number_format($cart->total_discount??$cart->total, 2, '.', ' ') . ' MZN' }}
-                    </h4>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    
-    
-
-    
+                                {{ number_format($cart->total_discount??$cart->total, 2, '.', ' ') . ' MZN' }}
+                            </h4>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
     
 </div>
 </div>
-<div class="payment ml-30">
+                    <div class="payment ml-30">
                         <h4 class="mb-30">Payment</h4>
                         <div class="payment_option">
                             <!-- <div class="custome-radio">
@@ -235,22 +233,29 @@
                                 <input class="form-check-input" required="" type="radio" name="payment_option" id="exampleRadios5" checked="1">
                                 <label class="form-check-label" for="exampleRadios5" data-bs-toggle="collapse" data-target="#paypal" aria-controls="paypal">M-Pesa</label>
                             </div>
+                            <input class="font-medium mb-1 coupon" name="telephone"  title="Mpesa Phone Number" placeholder="Telephone" type="text" required="" value="{{ old('telephone') }}" maxlength="9" pattern="8[4-5]\d{7}" title="8x xxx xxxx">
                         </div>
+                       
                         <div class="payment-logo d-flex" >
-                            <img class="mr-15" src="assets/imgs/theme/icons/payment-paypal.svg" alt="">
+                            <img class="mr-15" src="{{ asset('assets/mpesa.png') }}" alt="">
+                            <!-- <img class="mr-15" src="assets/imgs/theme/icons/payment-paypal.svg" alt="">
                             <img class="mr-15" src="assets/imgs/theme/icons/payment-visa.svg" alt="">
                             <img class="mr-15" src="assets/imgs/theme/icons/payment-master.svg" alt="">
-                            <img src="assets/imgs/theme/icons/payment-zapper.svg" alt="">
+                            <img src="assets/imgs/theme/icons/payment-zapper.svg" alt=""> -->
                         </div>
                         <button href="#" class="btn btn-fill-out btn-block mt-30" type="submit">
                             Place an Order<i class="fi-rs-sign-out ml-15"></i>
                         </button>
                         <!-- <a href="#" class="btn btn-fill-out btn-block mt-30">Place an Order<i class="fi-rs-sign-out ml-15"></i></a> -->
                     </div>
+                    
                 </div>
+                
             </div>
         </div>
     </form>
+
+   
         
-        @endsection
+@endsection
         

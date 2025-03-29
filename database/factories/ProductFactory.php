@@ -27,8 +27,8 @@ class ProductFactory extends Factory
             'product_code' => $this->faker->unique()->numerify('P###'), // Código único
             'product_qty' => $this->faker->numberBetween(10, 100), // Quantidade
             'product_tags' => $this->faker->words(3, true), // Tags separadas por vírgula
-            'product_size' => $this->faker->optional()->randomElement(['S', 'M', 'L', 'XL']), // Tamanhos
-            'product_color' => $this->faker->optional()->randomElement(['Red', 'Blue', 'Green', 'Black']), // Cores
+            'product_size' => $this->faker->randomElement(['S', 'M', 'L', 'XL']), // Tamanhos
+            'product_color' => $this->faker->randomElement(['Red', 'Blue', 'Green', 'Black']), // Cores
             'selling_price' => $sellingPrice, // Preço original
             'discount_price' => $this->faker->optional(0.7, null)->randomFloat(2, 5, $sellingPrice - 1), // Preço com desconto
             'short_descp' => $this->faker->sentence, // Descrição curta

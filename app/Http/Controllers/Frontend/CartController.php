@@ -142,7 +142,8 @@ class CartController extends Controller
                 ? ($total * ($coupon->discount / 100)) 
                 : $coupon->discount;
 
-            $cart->total_discount =  max(0, $total - $discount); // Garante que o valor final não seja negativo
+            $discount =  max(0, $total - $discount); // Garante que o valor final não seja negativo
+            $cart->total_discount = $discount == 0 ? null : $discount;
             $cart->coupon()->associate($coupon);
             $cart->save(); 
             return true;  
@@ -159,6 +160,8 @@ class CartController extends Controller
         $user = auth()->user();
         $cart = Cart::firstOrCreate(['user_id' => $user->id]);
         $cart->load('items');
+        $this->updateTotalPrice($cart);
+        $cart->refresh();
         return view('frontend.product.shop-cart', compact('cart'));
         
     }
@@ -217,12 +220,16 @@ class CartController extends Controller
     }
 
 
-    public function emptyCart(Request $request){
+    public function emptyCart($id){
         $user = auth()->user();
-        $cart = Cart::firstOrCreate(['user_id' => $user->id]);
+        $cart = Cart::findOrFail($id);
         $cart->emptyCart();
         // $cart->items()->delete();
         $cart->total = 0;
+        $cart->total_discount = null;
+        $cart->coupon_id = null;
+
+        // $cart->coupon()->dissociate();
         $cart->save();
         return redirect()->back()->with('success', 'Carrinho esvaziado com sucesso!');
     }
@@ -237,7 +244,6 @@ class CartController extends Controller
                 return $item->quantity * $item->price;
             });
             $cart->save();
-
             return  true;
         }
         return false;

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->string('reference', 65)->unique();
             $table->string('account_number', 15)->nullable();
+            $table->string('phone', 15)->nullable();
             $table->double('sum', 10, 2, true);
             $table->timestamps();
             $table->string('address'); // Endereço do pagador
